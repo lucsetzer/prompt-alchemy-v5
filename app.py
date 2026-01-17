@@ -360,15 +360,13 @@ async def step1():
     
     goal_cards = ""
     for value, label, description in goals:
-        icon_class = ICON_MAP.get(value, "fa-solid fa-question")
-        
         goal_cards += f'''
         <a href="/prompt-wizard/step/2?goal={value}" class="step-card">
             <div class="step-icon">
-                <i class="{icon_class}"></i>
+                <i class="fas fa-comment-dots"></i>
             </div>
-            <h3 style="margin: 0; color: #333;">{label}</h3>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">{description}</p>
+            <h3 style="margin: 0; color: #222;">{label}</h3>
+            <p style="margin: 0; color: #444; font-size: 0.9rem;">{description}</p>
         </a>
         '''
     
@@ -395,7 +393,7 @@ async def step1():
             </div>
         </header>
         
-        <div class="grid" style="grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+        <div class="step-grid">
             {goal_cards}
         </div>
         
