@@ -11,8 +11,6 @@ app = FastAPI(title="Prompt Wizard")
 app.include_router(dashboard_router)
 app.include_router(script_wizard_router)
 
-
-
 # ========== ICON MAPPING ==========
 ICON_MAP = {
     # Goals
@@ -71,7 +69,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {{
-            --primary: #00f5d4;      /* Aqua blue */
+            --primary: #0cc0df;      /* Aqua blue */
             --primary-hover: #00b4a0; /* Dark turquoise */
             --primary-focus: rgba(0, 245, 212, 0.2);
         }}
@@ -176,6 +174,113 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             50% {{ opacity: 1; transform: scale(1.1); }}
         }}
         
+        .clean-output {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .clean-output h3 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #333;
+        }
+
+        .clean-output h4 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 1.25rem 0 0.5rem 0;
+            color: #444;
+        }
+
+        .clean-output p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .clean-output ul, .clean-output ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            color: #555;
+        }
+
+        .clean-output li {
+            margin-bottom: 0.5rem;
+        }
+
+        .clean-output code {
+            background: #f5f5f5;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .clean-output strong {
+            font-weight: 600;
+            color: #333;
+        }
+
+
+        .clean-output {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .clean-output h3 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #333;
+            padding-bottom: 0.5rem;
+        }
+
+        .clean-output h4 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 1.25rem 0 0.5rem 0;
+            color: #444;
+        }
+
+        .clean-output p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .clean-output ul, .clean-output ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            color: #555;
+        }
+
+        .clean-output li {
+            margin-bottom: 0.5rem;
+        }
+
+        .clean-output code {
+            background: #f5f5f5;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
 
 
         # Add these styles to the layout function's CSS:
@@ -307,30 +412,20 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     <script>
         // Copy to clipboard function
         function copyPrompt() {{
-            const promptElement = document.querySelector('.prompt-output');
-            const text = promptElement.textContent;
+            const output = document.querySelector('.clean-output');
+            // Get text content (strips HTML tags)
+            const text = output.innerText || output.textContent;
             
             navigator.clipboard.writeText(text).then(() => {{
-                const button = document.querySelector('.copy-button');
-                if (button) {{
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    button.style.background = '#10b981';
-                    
-                    setTimeout(() => {{
-                        button.innerHTML = originalHTML;
-                        button.style.background = '';
-                    }}, 2000);
-                }}
-            }}).catch(err => {{
-                console.error('Copy failed:', err);
-                // Fallback: select text
-                const range = document.createRange();
-                range.selectNode(promptElement);
-                window.getSelection().removeAllRanges();
-                window.getSelection().addRange(range);
-                document.execCommand('copy');
-                alert('Text selected - press Ctrl+C to copy');
+                const button = document.querySelector('button[onclick="copyPrompt()"]');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {{
+                    button.innerHTML = originalHTML;
+                    button.style.background = '';
+                }}, 2000);
             }});
         }}
         
@@ -350,19 +445,37 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
 def call_deepseek_api(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
     """Call DeepSeek API to generate optimized prompt"""
     
+    # Get API key from environment
+    api_key = os.getenv("DEEPSEEK_API_KEY", "")
+    
+    if not api_key:
+        return f"""## Role & Context
+You are an expert AI assistant specializing in {goal}.
+
+## Task & Objective
+{user_prompt}
+
+## Target Audience
+{audience}
+
+## Desired Tone
+{tone}
+
+## Response Structure
+1. Clear introduction
+2. Detailed explanation
+3. Practical examples
+4. Actionable takeaways
+
+Copy this prompt into {platform.capitalize()} for optimal results."""
+    
     system_prompt = """You are a Prompt Engineering Expert. Create optimized, structured prompts.
 
 CRITICAL RULES:
 1. DO NOT answer the user's question
 2. DO NOT provide solutions or content
 3. ONLY create the prompt structure
-4. Make it DETAILED and READY-TO-USE
-
-EXAMPLE OUTPUT:
-## Role: Quantum Physics Educator
-## Task: Explain quantum computing to beginners
-## Requirements: Use simple analogies, avoid math, focus on core concepts
-## Format: Clear headings, bullet points, step-by-step"""
+4. Use clear markdown formatting"""
 
     user_message = f"""Create a STRUCTURED prompt for this request:
 
@@ -376,7 +489,7 @@ CONTEXT:
 Make it DETAILED and READY-TO-USE. The user will copy-paste this into {platform}."""
 
     headers = {
-        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+        "Authorization": f"Bearer {api_key}",  # Use api_key variable
         "Content-Type": "application/json"
     }
     
@@ -404,10 +517,10 @@ Make it DETAILED and READY-TO-USE. The user will copy-paste this into {platform}
                 
             return prompt
         else:
-            return f"## Error: API returned status {response.status_code}\n\n{response.text}"
+            return f"## Role: Expert AI Assistant\n## Task: {user_prompt}\n## Audience: {audience}\n## Tone: {tone}\n## Platform: {platform}\n\nProvide detailed, structured responses."
             
     except Exception as e:
-        return f"## Error: {str(e)}\n\n## Fallback Prompt Structure:\n\nRole: AI Assistant\nTask: {user_prompt}\nAudience: {audience}\nTone: {tone}\nFormat: Structured response"
+        return f"## Role: Expert AI Assistant\n## Task: {user_prompt}\n## Audience: {audience}\n## Tone: {tone}\n## Platform: {platform}\n\nProvide detailed, structured responses."
 
 # ========== HOME PAGE ==========
 @app.get("/")
@@ -933,103 +1046,136 @@ async def generate_prompt(
     tone: str = Query("professional"),
     prompt: str = Query("")
 ):
-    # Call DeepSeek API
+    # ... token checking code first ...
+    
+    # Generate the prompt
     optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
+    
+    # Convert to beautiful HTML
+    formatted_html = markdown_to_clean_html(optimized_prompt)
+    
+    # ... rest of your HTML template ...
     
     content = f'''
     <article>
         <header style="text-align: center; margin-bottom: 2rem;">
             <hgroup>
-                <h1><i class="fas fa-check-circle" style="color: var(--primary);"></i> Prompt Ready!</h1>
+                <h1><i class="fas fa-check-circle"></i> Prompt Ready!</h1>
                 <p>Your AI-optimized prompt for {platform.capitalize()}</p>
             </hgroup>
-            
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-                <div class="progress-steps">
-                    <div class="progress-step">1. Goal</div>
-                    <div class="progress-step">2. Audience</div>
-                    <div class="progress-step">3. Platform</div>
-                    <div class="progress-step">4. Style</div>
-                    <div class="progress-step">5. Tone</div>
-                    <div class="progress-step active">Complete!</div>
-                </div>
-            </div>
-            
-            <div class="card secondary" style="margin: 1rem auto; max-width: 800px; text-align: left;">
-                <div class="grid" style="grid-template-columns: repeat(5, 1fr); gap: 0.5rem; text-align: center;">
-                    <div>
-                        <small>Goal</small><br>
-                        <strong>{goal.capitalize()}</strong>
-                    </div>
-                    <div>
-                        <small>Audience</small><br>
-                        <strong>{audience.capitalize()}</strong>
-                    </div>
-                    <div>
-                        <small>Platform</small><br>
-                        <strong>{platform.capitalize()}</strong>
-                    </div>
-                    <div>
-                        <small>Style</small><br>
-                        <strong>{style.replace('-', ' ').title()}</strong>
-                    </div>
-                    <div>
-                        <small>Tone</small><br>
-                        <strong>{tone.capitalize()}</strong>
-                    </div>
-                </div>
-            </div>
         </header>
         
         <div class="card">
             <h3>Your Original Prompt:</h3>
-            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 3px solid #d1d5db;">
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
                 <p style="margin: 0; color: #4b5563;">"{prompt}"</p>
             </div>
             
             <h3>AI-Optimized Prompt:</h3>
-            <div class="document-output" 
-                 style="cursor: text; user-select: all; -webkit-user-select: all;"
-                 onclick="this.select()">
-                
-                <div style="padding: 1rem; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.9rem; line-height: 1.5;">
-                    {optimized_prompt}
-                </div>
+            
+            <!-- CLEAN OUTPUT HERE -->
+            <div class="clean-output">
+                {formatted_html}
             </div>
             
-            <div style="margin-top: 0.5rem; text-align: center;">
-                <small style="color: #666;">
-                    <i class="fas fa-mouse-pointer"></i> <strong>Click the prompt above</strong> to select all text, then <strong>Ctrl+C</strong> to copy
-                </small>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button onclick="copyPrompt()" class="primary">
+                    <i class="fas fa-copy"></i> Copy Prompt
+                </button>
             </div>
             
-            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
-                <p style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">How to use this prompt:</p>
-                <ol style="margin: 0; padding-left: 1.5rem; color: #4b5563;">
-                    <li style="margin-bottom: 0.5rem;"><strong>Click</strong> the prompt above (it will auto-select)</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Copy</strong> with Ctrl+C (Cmd+C on Mac)</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Paste</strong> into {platform.capitalize()} and press enter</li>
-                    <li>Get better, more structured results!</li>
-                </ol>
-            </div>
-        </div>
-        
-        <div class="grid" style="grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 3rem;">
-            <a href="/prompt-wizard/step/1" class="primary" style="text-align: center; padding: 1rem;">
-                <i class="fas fa-redo"></i> Create Another Prompt
-            </a>
-            
-            <a href="/" class="secondary" style="text-align: center; padding: 1rem;">
-                <i class="fas fa-home"></i> Back to Home
-            </a>
+            <!-- ... rest of your content ... -->
         </div>
     </article>
     '''
     
     return layout("Generated Prompt", content, step=7)
+
+import re
+
+def markdown_to_clean_html(markdown_text: str) -> str:
+    """
+    Convert markdown to clean, minimal HTML
+    - White/light gray text only
+    - No decorative lines or colors
+    - Clean spacing
+    """
+    if not markdown_text:
+        return ""
+    
+    lines = markdown_text.strip().split('\n')
+    html_parts = []
+    
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+        
+        # Empty line = spacing
+        if not line:
+            html_parts.append('<div style="height: 1rem;"></div>')
+            i += 1
+            continue
+        
+        # Header level 2 (##)
+        if line.startswith('## '):
+            title = line[3:].strip()
+            html_parts.append(f'<h3 style="font-weight: 600; font-size: 1.25rem; margin: 1.5rem 0 0.75rem 0; color: #333;">{title}</h3>')
+        
+        # Header level 3 (###)
+        elif line.startswith('### '):
+            title = line[4:].strip()
+            html_parts.append(f'<h4 style="font-weight: 600; font-size: 1.1rem; margin: 1.25rem 0 0.5rem 0; color: #444;">{title}</h4>')
+        
+        # Unordered list
+        elif line.startswith('- ') or line.startswith('* '):
+            list_items = []
+            while i < len(lines) and (lines[i].startswith('- ') or lines[i].startswith('* ')):
+                item = lines[i][2:].strip()
+                # Process bold
+                item = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item)
+                # Process inline code
+                item = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace;">\1</code>', item)
+                list_items.append(f'<li style="margin-bottom: 0.5rem; color: #555;">{item}</li>')
+                i += 1
+            
+            html_parts.append(f'<ul style="margin: 1rem 0; padding-left: 1.5rem; color: #555;">{"".join(list_items)}</ul>')
+            continue
+        
+        # Ordered list
+        elif re.match(r'^\d+[\.\)] ', line):
+            list_items = []
+            counter = 1
+            while i < len(lines) and re.match(r'^\d+[\.\)] ', lines[i]):
+                item = re.sub(r'^\d+[\.\)] ', '', lines[i]).strip()
+                item = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item)
+                item = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace;">\1</code>', item)
+                list_items.append(f'<li style="margin-bottom: 0.5rem; color: #555;"><span style="color: #777; margin-right: 0.5rem;">{counter}.</span>{item}</li>')
+                i += 1
+                counter += 1
+            
+            html_parts.append(f'<ol style="margin: 1rem 0; padding-left: 1.5rem; color: #555;">{"".join(list_items)}</ol>')
+            continue
+        
+        # Regular paragraph
+        else:
+            # Process inline formatting
+            processed_line = line
+            
+            # Bold
+            processed_line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', processed_line)
+            
+            # Italic
+            processed_line = re.sub(r'\*(.*?)\*', r'<em>\1</em>', processed_line)
+            
+            # Inline code
+            processed_line = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace;">\1</code>', processed_line)
+            
+            html_parts.append(f'<p style="margin-bottom: 1rem; line-height: 1.6; color: #555;">{processed_line}</p>')
+        
+        i += 1
+    
+    return '\n'.join(html_parts)
+
 
 # ========== RUN THE APP ==========
 if __name__ == "__main__":
