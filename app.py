@@ -229,31 +229,27 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     
 # ========== DEEPSEEK API FUNCTION ==========
 def call_deepseek_api(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
-    """Call DeepSeek API to generate optimized prompt"""
+    """Call DeepSeek API - FIXED VERSION"""
     
     # Get API key from environment
     api_key = os.getenv("DEEPSEEK_API_KEY", "")
     
     if not api_key:
-        return f"""## Role & Context
-You are an expert AI assistant specializing in {goal}.
+        print("⚠️ ERROR: DEEPSEEK_API_KEY not found in environment")
+        return f"""## Configuration Issue
 
-## Task & Objective
+The AI service is currently unavailable due to a configuration issue.
+
+**Your original request:**
 {user_prompt}
 
-## Target Audience
-{audience}
+**Context:**
+- Goal: {goal}
+- Audience: {audience}
+- Tone: {tone}
+- Platform: {platform}
 
-## Desired Tone
-{tone}
-
-## Response Structure
-1. Clear introduction
-2. Detailed explanation
-3. Practical examples
-4. Actionable takeaways
-
-Copy this prompt into {platform.capitalize()} for optimal results."""
+Please try again in a few moments, or contact support if this persists."""
     
     system_prompt = """You are a Prompt Engineering Expert. Create optimized, structured prompts.
 
@@ -261,7 +257,7 @@ CRITICAL RULES:
 1. DO NOT answer the user's question
 2. DO NOT provide solutions or content
 3. ONLY create the prompt structure
-4. Use clear markdown formatting"""
+4. Make it DETAILED and READY-TO-USE"""
 
     user_message = f"""Create a STRUCTURED prompt for this request:
 
@@ -275,7 +271,7 @@ CONTEXT:
 Make it DETAILED and READY-TO-USE. The user will copy-paste this into {platform}."""
 
     headers = {
-        "Authorization": f"Bearer {api_key}",  # Use api_key variable
+        "Authorization": f"Bearer {api_key}",  # Use the variable
         "Content-Type": "application/json"
     }
     
@@ -286,27 +282,61 @@ Make it DETAILED and READY-TO-USE. The user will copy-paste this into {platform}
             {"role": "user", "content": user_message}
         ],
         "temperature": 0.7,
-        "max_tokens": 1000,
-        "stream": False
+        "max_tokens": 1000
     }
     
     try:
-        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=data, timeout=60)
+        response = requests.post(
+            "https://api.deepseek.com/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=30
+        )
         
         if response.status_code == 200:
             result = response.json()
-            prompt = result["choices"][0]["message"]["content"].strip()
-            
-            # Ensure proper formatting
-            if not prompt.startswith("##"):
-                prompt = f"## AI-Optimized Prompt for {platform}\n\n{prompt}"
-                
-            return prompt
+            return result["choices"][0]["message"]["content"].strip()
         else:
-            return f"## Role: Expert AI Assistant\n## Task: {user_prompt}\n## Audience: {audience}\n## Tone: {tone}\n## Platform: {platform}\n\nProvide detailed, structured responses."
+            error_msg = f"API Error {response.status_code}"
+            if response.status_code == 401:
+                error_msg = "API Key Invalid (401 Unauthorized)"
+            elif response.status_code == 429:
+                error_msg = "Rate Limit Exceeded (429 Too Many Requests)"
             
+            return f"""## {error_msg}
+
+**Fallback Prompt Structure:**
+
+**Role:** Expert AI Assistant specializing in {goal}
+**Task:** {user_prompt}
+**Audience:** {audience}
+**Tone:** {tone}
+**Platform:** {platform}
+
+**Requirements:**
+1. Provide detailed, actionable information
+2. Use clear headings and organization
+3. Include examples when helpful
+4. Maintain consistent {tone} tone throughout
+
+**Format:**
+- Structured sections with headers
+- Bullet points for lists
+- Clear, concise language
+- Practical, implementable advice"""
+            
+    except requests.exceptions.Timeout:
+        return "## Error: API timeout\n\nPlease try again in a moment."
     except Exception as e:
-        return f"## Role: Expert AI Assistant\n## Task: {user_prompt}\n## Audience: {audience}\n## Tone: {tone}\n## Platform: {platform}\n\nProvide detailed, structured responses."
+        return f"""## Error: {str(e)[:100]}
+
+**Basic Prompt Template:**
+
+You are an expert in {goal}. Your task is to: {user_prompt}
+
+Target audience: {audience}
+Desired tone: {tone}
+Output format: Structured with clear sections"""
 
 # ========== HOME PAGE ==========
 @app.get("/")
