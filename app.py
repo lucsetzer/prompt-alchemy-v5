@@ -56,10 +56,11 @@ ICON_MAP = {
 
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
-    """Simple, working layout with no syntax errors"""
+    """WORKING layout function with no syntax errors"""
     
     progress_percent = (step / 6) * 100 if step <= 6 else 100
     
+    # SIMPLE HTML - no complex f-string issues
     html = f'''<!DOCTYPE html>
 <html>
 <head>
@@ -68,60 +69,15 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS VARIABLES - NO ERRORS */
-        :root {{
-            --primary: #0cc0df;
-            --primary-hover: #0aa0bf;
-            /* STEP CARDS - auDHD Friendly */
-            .step-card {
-                background: #ffffff;
-                border: 2px solid #e5e7eb;
-                border-radius: 12px;
-                padding: 1.5rem;
-                text-align: center;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                text-decoration: none;
-                color: inherit;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.75rem;
-                min-height: 180px;  /* Original size */
-                justify-content: center;
-                margin: 0.5rem;
-            }
-            
-            .step-card:hover {
-                border-color: #0cc0df;
-                transform: translateY(-4px);
-                box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
-            }
-            
-            .step-icon {
-                font-size: 2.5rem;
-                color: #0cc0df;
-                margin-bottom: 0.5rem;
-            }
-            
-            /* Grid for cards */
-            .step-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 1.5rem;
-                margin: 2rem 0;
-            }
-                    }}
-        
-        /* BODY - NO VARIABLES IN CSS VALUES */
+        /* BODY - PROPERLY ESCAPED */
         body {{
             background: #ffffff;
-            color: #333333;
+            color: #222222;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }}
         
-        /* PROGRESS BAR - USING PERCENT VARIABLE IS OK */
+        /* PROGRESS BAR */
         .progress-container {{
             margin: 2rem 0;
         }}
@@ -158,7 +114,46 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             font-weight: bold;
         }}
         
-        /* CLEAN OUTPUT - SIMPLE */
+        /* STEP CARDS */
+        .step-card {{
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            min-height: 180px;
+            justify-content: center;
+        }}
+        
+        .step-card:hover {{
+            border-color: #0cc0df;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
+        }}
+        
+        .step-icon {{
+            font-size: 2.5rem;
+            color: #0cc0df;
+            margin-bottom: 0.5rem;
+        }}
+        
+        /* GRID */
+        .step-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }}
+        
+        /* OUTPUT */
         .clean-output {{
             background: #ffffff;
             border: 1px solid #e0e0e0;
@@ -166,7 +161,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             padding: 1.5rem;
             margin: 1rem 0;
             line-height: 1.6;
-            color: #555555;
+            color: #444444;
             font-size: 0.95rem;
         }}
         
@@ -174,61 +169,22 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             font-weight: 600;
             font-size: 1.25rem;
             margin: 1.5rem 0 0.75rem 0;
-            color: #333333;
+            color: #222222;
         }}
         
-        .clean-output h4 {{
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: 1.25rem 0 0.5rem 0;
-            color: #444444;
-        }}
-        
-        .clean-output p {{
-            margin-bottom: 1rem;
-            color: #555555;
-        }}
-        
-        .clean-output ul,
-        .clean-output ol {{
-            margin: 1rem 0;
-            padding-left: 1.5rem;
-            color: #555555;
-        }}
-        
-        .clean-output li {{
-            margin-bottom: 0.5rem;
-        }}
-        
-        .clean-output code {{
-            background: #f5f5f5;
-            padding: 0.1rem 0.3rem;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }}
-        
-        /* NAVIGATION */
+        /* NAV */
         nav.container {{
             background: #ffffff;
             border-bottom: 1px solid #e5e7eb;
             padding: 1rem 0;
         }}
         
-        /* CARDS */
         article, .card {{
             background: #ffffff;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1rem 0;
-        }}
-        
-        /* GRID FIX */
-        .grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
         }}
     </style>
 </head>
@@ -237,7 +193,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <ul>
             <li>
                 <strong>
-                    <a href="/" style="color: #0cc0df; text-decoration: none;">
+                    <a href="/" style="color: #0a8ea8; text-decoration: none;">
                         <i class="fas fa-flask"></i> Prompts Alchemy
                     </a>
                 </strong>
@@ -246,7 +202,6 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <ul>
             <li><a href="/"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="/prompt-wizard/step/1"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
-            <li><a href="/pricing"><i class="fas fa-tags"></i> Pricing</a></li>
         </ul>
     </nav>
     
@@ -254,7 +209,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         {content}
     </main>
     
-    <footer class="container" style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #666666; border-top: 1px solid #e5e7eb;">
+    <footer style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #666666; border-top: 1px solid #e5e7eb;">
         <p>© 2024 Prompts Alchemy</p>
     </footer>
     
