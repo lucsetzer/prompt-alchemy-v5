@@ -960,6 +960,72 @@ def markdown_to_clean_html(markdown_text: str) -> str:
     
     return '\n'.join(html_parts)
 
+@app.get("/debug/api")
+async def debug_api():
+    """Check if API key is working"""
+    
+    # Get API key
+    api_key = os.getenv("DEEPSEEK_API_KEY", "")
+    api_key_set = bool(api_key)
+    
+    # Show preview (last 4 chars for security)
+    api_preview = "Not set" if not api_key_set else f"...{api_key[-4:]}"
+    
+    # Test the API
+    test_result = {}
+    if api_key_set:
+        try:
+            # Simple test call
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            test_data = {
+                "model": "deepseek-chat",
+                "messages": [
+                    {"role": "user", "content": "Say 'API test successful'"}
+                ],
+                "max_tokens": 10
+            }
+            
+            import requests
+            response = requests.post(
+                "https://api.deepseek.com/chat/completions",
+                headers=headers,
+                json=test_data,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                test_result = {
+                    "status": "✅ Working",
+                    "response": response.json()["choices"][0]["message"]["content"]
+                }
+            else:
+                test_result = {
+                    "status": f"❌ Error {response.status_code}",
+                    "response": response.text[:200]
+                }
+                
+        except Exception as e:
+            test_result = {
+                "status": f"❌ Exception",
+                "error": str(e)
+            }
+    else:
+        test_result = {"status": "❌ No API key to test"}
+    
+    return {
+        "api_key_set": api_key_set,
+        "api_key_preview": api_preview,
+        "api_test": test_result,
+        "environment": os.getenv("APP_ENV", "unknown"),
+        "render_service": os.getenv("RENDER_SERVICE_ID", "Not on Render"),
+        "all_env_vars": dict(os.environ)  # Shows all environment variables
+    }
+
+
 
 # ========== RUN THE APP ==========
 if __name__ == "__main__":
