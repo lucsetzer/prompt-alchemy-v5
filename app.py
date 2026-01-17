@@ -11,9 +11,7 @@ app = FastAPI(title="Prompt Wizard")
 app.include_router(dashboard_router)
 app.include_router(script_wizard_router)
 
-# ========== CONFIGURATION ==========
-DEEPSEEK_API_KEY = "sk-8dadf46bd95c47f88e8cb1fb4cd1f89e"
-DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
+
 
 # ========== ICON MAPPING ==========
 ICON_MAP = {
