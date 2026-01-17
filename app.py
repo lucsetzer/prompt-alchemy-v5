@@ -194,7 +194,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             <li>
                 <strong>
                     <a href="/" style="color: #0a8ea8; text-decoration: none;">
-                        <i class="fas fa-flask"></i> Prompts Alchemy
+                        <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
                     </a>
                 </strong>
             </li>
