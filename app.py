@@ -72,7 +72,46 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         :root {{
             --primary: #0cc0df;
             --primary-hover: #0aa0bf;
-        }}
+            /* STEP CARDS - auDHD Friendly */
+            .step-card {
+                background: #ffffff;
+                border: 2px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 1.5rem;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                text-decoration: none;
+                color: inherit;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+                min-height: 180px;  /* Original size */
+                justify-content: center;
+                margin: 0.5rem;
+            }
+            
+            .step-card:hover {
+                border-color: #0cc0df;
+                transform: translateY(-4px);
+                box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
+            }
+            
+            .step-icon {
+                font-size: 2.5rem;
+                color: #0cc0df;
+                margin-bottom: 0.5rem;
+            }
+            
+            /* Grid for cards */
+            .step-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1.5rem;
+                margin: 2rem 0;
+            }
+                    }}
         
         /* BODY - NO VARIABLES IN CSS VALUES */
         body {{
