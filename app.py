@@ -56,9 +56,8 @@ ICON_MAP = {
 
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
-    """Base layout with aqua blue theme and progress bar"""
+    """Simple, working layout with no syntax errors"""
     
-    # Calculate progress percentage
     progress_percent = (step / 6) * 100 if step <= 6 else 100
     
     html = f'''<!DOCTYPE html>
@@ -67,51 +66,23 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     <title>{title}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* CSS VARIABLES - NO ERRORS */
         :root {{
-            --primary: #0cc0df;      /* Aqua blue */
-            --primary-hover: #00b4a0; /* Dark turquoise */
-            --primary-focus: rgba(0, 245, 212, 0.2);
+            --primary: #0cc0df;
+            --primary-hover: #0aa0bf;
         }}
         
-        /* Apply theme to Pico.css */
-        a, [role="button"] {{
-            --pico-primary: var(--primary);
-            --pico-primary-hover: var(--primary-hover);
-            --pico-primary-focus: var(--primary-focus);
+        /* BODY - NO VARIABLES IN CSS VALUES */
+        body {{
+            background: #ffffff;
+            color: #333333;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }}
         
-        .step-card {{
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            min-height: 180px;
-            justify-content: center;
-        }}
-        
-        .step-card:hover {{
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0, 245, 212, 0.15);
-            background: rgba(0, 245, 212, 0.03);
-        }}
-        
-        .step-icon {{
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }}
-        
-        /* Progress bar */
+        /* PROGRESS BAR - USING PERCENT VARIABLE IS OK */
         .progress-container {{
             margin: 2rem 0;
         }}
@@ -125,7 +96,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         
         .progress-fill {{
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), #00d9ff);
+            background: linear-gradient(90deg, #0cc0df, #00d9ff);
             width: {progress_percent}%;
             transition: width 0.5s ease;
         }}
@@ -135,7 +106,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             justify-content: space-between;
             margin-top: 0.5rem;
             font-size: 0.85rem;
-            color: #666;
+            color: #666666;
         }}
         
         .progress-step {{
@@ -144,264 +115,99 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         }}
         
         .progress-step.active {{
-            color: var(--primary);
+            color: #0cc0df;
             font-weight: bold;
         }}
         
-        /* Loading animation for AI */
-        .loading-ai {{
-            text-align: center;
-            padding: 3rem;
-        }}
-        
-        .loading-dots {{
-            display: inline-block;
-        }}
-        
-        .loading-dots span {{
-            animation: pulse 1.5s infinite;
-            opacity: 0.3;
-            display: inline-block;
-            font-size: 2rem;
-            margin: 0 0.25rem;
-        }}
-        
-        .loading-dots span:nth-child(2) {{ animation-delay: 0.3s; }}
-        .loading-dots span:nth-child(3) {{ animation-delay: 0.6s; }}
-        
-        @keyframes pulse {{
-            0%, 100% {{ opacity: 0.3; transform: scale(0.9); }}
-            50% {{ opacity: 1; transform: scale(1.1); }}
-        }}
-        
-        .clean-output {
+        /* CLEAN OUTPUT - SIMPLE */
+        .clean-output {{
             background: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 6px;
             padding: 1.5rem;
             margin: 1rem 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             line-height: 1.6;
-            color: #555;
+            color: #555555;
             font-size: 0.95rem;
-        }
-
-        .clean-output h3 {
+        }}
+        
+        .clean-output h3 {{
             font-weight: 600;
             font-size: 1.25rem;
             margin: 1.5rem 0 0.75rem 0;
-            color: #333;
-        }
-
-        .clean-output h4 {
+            color: #333333;
+        }}
+        
+        .clean-output h4 {{
             font-weight: 600;
             font-size: 1.1rem;
             margin: 1.25rem 0 0.5rem 0;
-            color: #444;
-        }
-
-        .clean-output p {
+            color: #444444;
+        }}
+        
+        .clean-output p {{
             margin-bottom: 1rem;
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .clean-output ul, .clean-output ol {
+            color: #555555;
+        }}
+        
+        .clean-output ul,
+        .clean-output ol {{
             margin: 1rem 0;
             padding-left: 1.5rem;
-            color: #555;
-        }
-
-        .clean-output li {
+            color: #555555;
+        }}
+        
+        .clean-output li {{
             margin-bottom: 0.5rem;
-        }
-
-        .clean-output code {
+        }}
+        
+        .clean-output code {{
             background: #f5f5f5;
             padding: 0.1rem 0.3rem;
             border-radius: 3px;
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
-        }
-
-        .clean-output strong {
-            font-weight: 600;
-            color: #333;
-        }
-
-
-        .clean-output {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
+        }}
+        
+        /* NAVIGATION */
+        nav.container {{
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
+        }}
+        
+        /* CARDS */
+        article, .card {{
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
             padding: 1.5rem;
             margin: 1rem 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: #555;
-            font-size: 0.95rem;
-        }
-
-        .clean-output h3 {
-            font-weight: 600;
-            font-size: 1.25rem;
-            margin: 1.5rem 0 0.75rem 0;
-            color: #333;
-            padding-bottom: 0.5rem;
-        }
-
-        .clean-output h4 {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: 1.25rem 0 0.5rem 0;
-            color: #444;
-        }
-
-        .clean-output p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .clean-output ul, .clean-output ol {
-            margin: 1rem 0;
-            padding-left: 1.5rem;
-            color: #555;
-        }
-
-        .clean-output li {
-            margin-bottom: 0.5rem;
-        }
-
-        .clean-output code {
-            background: #f5f5f5;
-            padding: 0.1rem 0.3rem;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-
-
-        # Add these styles to the layout function's CSS:
-
-/* Document-style prompt output */
-.document-output {{
-    background: white;
-    color: #374151;
-    padding: 2rem;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    font-size: 0.95rem;
-    white-space: pre-wrap;
-    position: relative;
-    margin: 2rem 0;
-    line-height: 1.5;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    max-width: 100%;
-    overflow-x: auto;
-}}
-
-/* Remove bold from everything except headers */
-.document-output *:not(h2):not(h3):not(h4) {{
-    font-weight: normal !important;
-}}
-
-.document-output h2 {{
-  color: #111827;
-    margin-top: 1.5em;
-    margin-bottom: 0.75em;
-    border-bottom: 2px solid var(--primary);
-    padding-bottom: 0.5rem;
-    font-weight: 600;
-    font-size: 1.25rem;
-}} 
-.document-output h3 {{
-  color: #1f2937;
-    margin-top: 1.25em;
-    margin-bottom: 0.5em;
-    font-weight: 600;
-    font-size: 1.1rem;
-}} 
-.document-output h4 {{
-    color: #111827;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}}
-
-.document-output h2 {{
-    border-bottom: 2px solid var(--primary);
-    padding-bottom: 0.5rem;
-}}
-
-.document-output ul, 
-.document-output ol {{
-    padding-left: 1.5rem;
-    margin: 1rem 0;
-}}
-
-.document-output li {{
-    margin-bottom: 0.5rem;
-}}
-
-.document-output code {{
-    background: #f3f4f6;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9em;
-}}
-
-.document-output pre {{
-    background: #f8fafc;
-    padding: 1rem;
-    border-radius: 6px;
-    border: 1px solid #e5e7eb;
-    overflow-x: auto;
-    margin: 1rem 0;
-}}
-
-/* Formatting for the AI's markdown-like output */
-.document-output .prompt-section {{
-    margin-bottom: 2rem;
-}}
-
-.document-output .prompt-section:last-child {{
-    margin-bottom: 0;
-}}
-
-
-
-        /* Prompt output styling - FIXED for better readability */
-        # In the layout function, find the .prompt-output and .copy-button CSS and replace with:
-
-.prompt-output {{
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    font-family: 'Courier New', monospace;
-    white-space: pre-wrap;
-    position: relative;
-    margin: 1.5rem 0;
-    line-height: 1.6;
-    min-height: 200px;
-}}
+        }}
+        
+        /* GRID FIX */
+        .grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }}
     </style>
 </head>
 <body>
-        <nav class="container">
+    <nav class="container">
         <ul>
-            <li><strong><a href="/dashboard" style="text-decoration:none; color: var(--primary);">
-                <i class="fas fa-flask"></i> Prompts Alchemy
-            </a></strong></li>
+            <li>
+                <strong>
+                    <a href="/" style="color: #0cc0df; text-decoration: none;">
+                        <i class="fas fa-flask"></i> Prompts Alchemy
+                    </a>
+                </strong>
+            </li>
         </ul>
         <ul>
-            <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="/prompt-wizard/step/1"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
-            <li><a href="/script-wizard"><i class="fas fa-scroll"></i> Script Wizard</a></li>
+            <li><a href="/pricing"><i class="fas fa-tags"></i> Pricing</a></li>
         </ul>
     </nav>
     
@@ -409,38 +215,24 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         {content}
     </main>
     
+    <footer class="container" style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #666666; border-top: 1px solid #e5e7eb;">
+        <p>© 2024 Prompts Alchemy</p>
+    </footer>
+    
     <script>
-        // Copy to clipboard function
         function copyPrompt() {{
             const output = document.querySelector('.clean-output');
-            // Get text content (strips HTML tags)
-            const text = output.innerText || output.textContent;
-            
+            const text = output.innerText;
             navigator.clipboard.writeText(text).then(() => {{
-                const button = document.querySelector('button[onclick="copyPrompt()"]');
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                button.style.background = '#10b981';
-                
-                setTimeout(() => {{
-                    button.innerHTML = originalHTML;
-                    button.style.background = '';
-                }}, 2000);
+                alert('Prompt copied to clipboard!');
             }});
-        }}
-        
-        // Auto-scroll to output
-        function scrollToOutput() {{
-            const output = document.querySelector('.prompt-output');
-            if (output) {{
-                output.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
-            }}
         }}
     </script>
 </body>
 </html>'''
+    
     return HTMLResponse(content=html)
-
+    
 # ========== DEEPSEEK API FUNCTION ==========
 def call_deepseek_api(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
     """Call DeepSeek API to generate optimized prompt"""
