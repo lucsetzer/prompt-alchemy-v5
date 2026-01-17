@@ -860,7 +860,33 @@ async def generate_prompt(
     tone: str = Query("professional"),
     prompt: str = Query("")
 ):
-    # ... token checking code first ...
+    # Add debug logging
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    
+    # Log the request
+    logging.info(f"Generating prompt: {prompt[:50]}...")
+    
+    # Check API key
+    api_key = os.getenv("DEEPSEEK_API_KEY", "")
+    logging.info(f"API key exists: {bool(api_key)}")
+    if api_key:
+        logging.info(f"API key preview: ...{api_key[-4:]}")
+    
+    # Call API
+    try:
+        optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
+        logging.info(f"API response length: {len(optimized_prompt)}")
+        
+        # Check if it's an error message
+        if "Error" in optimized_prompt or "unavailable" in optimized_prompt.lower():
+            logging.error(f"API returned error: {optimized_prompt[:100]}")
+            
+    except Exception as e:
+        logging.error(f"Exception in generate_prompt: {e}")
+        optimized_prompt = f"## System Error\n\n{str(e)}"
+    
+    # Rest of your function...
     
     # Generate the prompt
     optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
