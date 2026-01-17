@@ -175,7 +175,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         }}
         
         .clean-output {
-            background: white;
+            background: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 6px;
             padding: 1.5rem;
