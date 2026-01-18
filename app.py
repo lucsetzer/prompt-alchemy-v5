@@ -407,7 +407,7 @@ async def call_deepseek_api_async(goal: str, audience: str, tone: str, platform:
 async def home():
     content = '''
     <!-- HERO SECTION - Full width, proper brand color -->
-    <section style="text-align: center; padding: 6rem 2rem; background: #0cc0df; color: white; width: 100%;">
+    <section style="text-align: center; padding: 6rem 2rem; background: dark-turquoise; color: white; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; font-weight: 700;">Professional AI Tools for Content Creators</h1>
             <p style="font-size: 1.5rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
@@ -462,7 +462,7 @@ async def home():
                 <!-- Prompt -->
                 <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
                     <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1rem;">
-                        <i class="fas fa-hat-wizard"></i>
+                        <i class="fa-solid fa-wand"></i>
                     </div>
                     <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Prompt</h3>
                     <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create optimized AI prompts</p>
@@ -505,7 +505,7 @@ async def home():
                         <i class="fas fa-scroll"></i>
                     </div>
                     <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Script</h3>
-                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create video scripts</p>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create video and presentation scripts</p>
                     <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">1 token • Coming Soon</button>
                 </div>
 
