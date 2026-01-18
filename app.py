@@ -97,11 +97,10 @@ async def test_page():
 
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
-    """WORKING layout function with no syntax errors"""
+    """WORKING layout function - simplified"""
     
     progress_percent = (step / 6) * 100 if step <= 6 else 100
     
-    # SIMPLE HTML - no complex f-string issues
     html = f'''<!DOCTYPE html>
 <html>
 <head>
@@ -110,7 +109,6 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* BODY - PROPERLY ESCAPED */
         body {{
             background: #ffffff;
             color: #333333;
@@ -118,7 +116,6 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }}
         
-        /* PROGRESS BAR */
         .progress-container {{
             margin: 2rem 0;
         }}
@@ -142,37 +139,9 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             justify-content: space-between;
             margin-top: 0.5rem;
             font-size: 0.85rem;
-            color: #444444;
+            color: #555555;
         }}
         
-        .progress-step {{
-            text-align: center;
-            flex: 1;
-        }}
-        
-        .progress-step.active {{
-            color: #0cc0df;
-            font-weight: bold;
-        }}
-
-        /* Fix button overlap */
-        main.container {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .card {
-            position: relative;
-            z-index: 2;
-        }
-        
-        button, a[role="button"] {
-            position: relative;
-            z-index: 10;
-        }
-
-        
-        /* STEP CARDS */
         .step-card {{
             background: #ffffff;
             border: 2px solid #e5e7eb;
@@ -182,7 +151,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #444444;
+            color: #333333;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -197,21 +166,6 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
         }}
         
-        .step-icon {{
-            font-size: 2.5rem;
-            color: #0cc0df;
-            margin-bottom: 0.5rem;
-        }}
-        
-        /* GRID */
-        .step-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }}
-        
-        /* OUTPUT */
         .clean-output {{
             background: #ffffff;
             border: 1px solid #e0e0e0;
@@ -219,30 +173,14 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             padding: 1.5rem;
             margin: 1rem 0;
             line-height: 1.6;
-            color: #444444;
+            color: #333333;
             font-size: 0.95rem;
         }}
         
-        .clean-output h3 {{
-            font-weight: 600;
-            font-size: 1.25rem;
-            margin: 1.5rem 0 0.75rem 0;
-            color: #222222;
-        }}
-        
-        /* NAV */
         nav.container {{
             background: #ffffff;
             border-bottom: 1px solid #e5e7eb;
             padding: 1rem 0;
-        }}
-        
-        article, .card {{
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
         }}
     </style>
 </head>
@@ -251,7 +189,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <ul>
             <li>
                 <strong>
-                    <a href="/" style="color: #0cc0df; text-decoration: none;">
+                    <a href="/" style="color: #0a8ea8; text-decoration: none;">
                         <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
                     </a>
                 </strong>
@@ -271,16 +209,15 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <p>© 2024 Prompts Alchemy</p>
     </footer>
     
-            <script>
-                function copyPrompt() {{
-                    const output = document.querySelector('.clean-output');
-                    const text = output.innerText;
-                    navigator.clipboard.writeText(text).then(() => {{
-                        alert('Prompt copied!');
-                    }});
-                }}
-            </script>
-
+    <script>
+        function copyPrompt() {{
+            const output = document.querySelector('.clean-output');
+            const text = output.innerText;
+            navigator.clipboard.writeText(text).then(() => {{
+                alert('Prompt copied to clipboard!');
+            }});
+        }}
+    </script>
 </body>
 </html>'''
     
