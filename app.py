@@ -223,7 +223,15 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
                 alert('Prompt copied to clipboard!');
             }});
         }}
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generate-form').style.display = 'none';
+        }
     </script>
+
+
+
 </body>
 </html>'''
     
@@ -972,6 +980,10 @@ async def generate_prompt(
     '''
     
     return layout("Generated Prompt", content, step=7)
+
+// Add to your step 6 form:
+<form id="generate-form" onsubmit="showLoading()">
+
 
 import re
 
