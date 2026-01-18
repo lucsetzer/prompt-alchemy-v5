@@ -121,7 +121,19 @@ def init_db():
         token TEXT PRIMARY KEY,
         email TEXT,
         expires_at TIMESTAMP,
-        used INTEGER DEFAULT 0
+        used INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+    
+    # User sessions table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS user_sessions (
+        session_token TEXT PRIMARY KEY,
+        email TEXT,
+        expires_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (email) REFERENCES users(email)
     )
     ''')
     
@@ -130,6 +142,151 @@ def init_db():
 
 # Initialize on startup
 init_db()
+
+
+@app.get("/api/auth/login")
+async def verify_login(token: str):
+    """Verify magic link token and log user in"""
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    try:
+        # Check token validity
+        cursor.execute(
+            """SELECT email, expires_at, used 
+               FROM login_tokens 
+               WHERE token = ? AND used = 0""",
+            (token,)
+        )
+        token_data = cursor.fetchone()
+        
+        if not token_data:
+            return HTMLResponse("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Invalid Link - Prompts Alchemy</title>
+                    <style>
+                        body { background: #0f172a; color: white; font-family: sans-serif; padding: 3rem; text-align: center; }
+                        .card { background: #1e293b; padding: 2rem; border-radius: 12px; max-width: 500px; margin: 2rem auto; }
+                        .success { color: #10b981; }
+                        .error { color: #ef4444; }
+                    </style>
+                </head>
+                <body>
+                    <div class="card">
+                        <h1 class="error">Invalid or Expired Link</h1>
+                        <p>This login link is invalid or has already been used.</p>
+                        <p><a href="/prompt-wizard" style="color: #0cc0df;">Go to Prompt Wizard</a></p>
+                    </div>
+                </body>
+                </html>
+            """)
+        
+        email, expires_at, used = token_data
+        
+        # Check expiration
+        if datetime.datetime.now() > datetime.datetime.fromisoformat(expires_at):
+            return HTMLResponse("""
+                <!DOCTYPE html>
+                <html>
+                <body style="background: #0f172a; color: white; font-family: sans-serif; padding: 3rem; text-align: center;">
+                    <div style="background: #1e293b; padding: 2rem; border-radius: 12px; max-width: 500px; margin: 2rem auto;">
+                        <h1 style="color: #ef4444;">Link Expired</h1>
+                        <p>This login link has expired. Please request a new one.</p>
+                        <p><a href="/prompt-wizard" style="color: #0cc0df;">Go to Prompt Wizard</a></p>
+                    </div>
+                </body>
+                </html>
+            """)
+        
+        # Mark token as used
+        cursor.execute(
+            "UPDATE login_tokens SET used = 1 WHERE token = ?",
+            (token,)
+        )
+        
+        # Update user last login
+        cursor.execute(
+            "UPDATE users SET last_login = ? WHERE email = ?",
+            (datetime.datetime.now(), email)
+        )
+        
+        conn.commit()
+        
+        # Create session token for the user
+        session_token = secrets.token_urlsafe(32)
+        session_expires = datetime.datetime.now() + datetime.timedelta(days=30)
+        
+        # Store session (in production, use Redis or database)
+        cursor.execute(
+            """INSERT OR REPLACE INTO user_sessions 
+               (session_token, email, expires_at) 
+               VALUES (?, ?, ?)""",
+            (session_token, email, session_expires)
+        )
+        
+        conn.commit()
+        
+        # Create response with redirect and set cookie
+        response = HTMLResponse(f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Login Successful - Prompts Alchemy</title>
+                <style>
+                    body {{ background: #0f172a; color: white; font-family: sans-serif; padding: 3rem; text-align: center; }}
+                    .card {{ background: #1e293b; padding: 2rem; border-radius: 12px; max-width: 500px; margin: 2rem auto; }}
+                    .success {{ color: #10b981; }}
+                </style>
+                <script>
+                    // Set session cookie
+                    document.cookie = "session_token={session_token}; path=/; max-age=2592000; samesite=strict";
+                    
+                    // Redirect after 2 seconds
+                    setTimeout(function() {{
+                        window.location.href = "/dashboard";
+                    }}, 2000);
+                </script>
+            </head>
+            <body>
+                <div class="card">
+                    <h1 class="success">✅ Login Successful!</h1>
+                    <p>Welcome back, <strong>{email}</strong>!</p>
+                    <p>Redirecting to your dashboard...</p>
+                    <p><a href="/dashboard" style="color: #0cc0df;">Click here if not redirected</a></p>
+                </div>
+            </body>
+            </html>
+        """)
+        
+        # Also set cookie server-side
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            max_age=60*60*24*30,  # 30 days
+            httponly=True,
+            samesite="strict"
+        )
+        
+        return response
+        
+    except Exception as e:
+        conn.rollback()
+        return HTMLResponse(f"""
+            <html>
+            <body style="background: #0f172a; color: white; padding: 3rem; text-align: center;">
+                <div style="background: #1e293b; padding: 2rem; border-radius: 12px; max-width: 500px; margin: 2rem auto;">
+                    <h1 style="color: #ef4444;">Error</h1>
+                    <p>An error occurred: {str(e)}</p>
+                    <p><a href="/" style="color: #0cc0df;">Go Home</a></p>
+                </div>
+            </body>
+            </html>
+        """)
+    finally:
+        conn.close()
 
 
 # ========== CORE LAYOUT FUNCTION ==========
