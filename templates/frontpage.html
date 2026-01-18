@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prompts Alchemy - Professional AI Tools</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Reset container for full width */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Navigation - matches wizard */
+        nav.container {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
+            max-width: 100%;
+        }
+        
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        /* Full width sections */
+        .full-width-section {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        /* Consistent cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="container">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; width: 100%;">
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 2rem;">
+                <li>
+                    <strong>
+                        <a href="/" style="color: #0a8ea8; text-decoration: none; font-size: 1.2rem;">
+                            <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
+                        </a>
+                    </strong>
+                </li>
+            </ul>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 1.5rem;">
+                <li><a href="/prompt-wizard/step/1" style="text-decoration: none;"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
+                <li><a href="#pricing" style="text-decoration: none;"><i class="fas fa-tag"></i> Pricing</a></li>
+                <li><a href="/dashboard" style="text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section style="text-align: center; padding: 6rem 2rem; background: #0cc0df; color: white; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; font-weight: 700;">Professional AI Tools for Content Creators</h1>
+            <p style="font-size: 1.5rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                Transform ideas into scripts, hooks, documents, and accessible content
+            </p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <button onclick="showSignupModal()" role="button" style="background: white; color: #0cc0df; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
+                    <i class="fas fa-rocket"></i> Start Creating
+                </button>
+                <a href="#pricing" role="button" style="background: transparent; border: 2px solid white; color: white; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                    <i class="fas fa-tag"></i> View Pricing
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- REST OF YOUR FRONTPAGE CONTENT GOES HERE -->
+    <!-- Copy all the sections from your frontpage but remove the footer -->
+    
+    <!-- FOOTER (only one, at the bottom) -->
+    <footer style="background: #1f2937; color: white; padding: 4rem 2rem; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div class="grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem;">
+                <!-- Brand -->
+                <div>
+                    <h3 style="color: #0cc0df; font-size: 1.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-hat-wizard"></i> Prompts Alchemy
+                    </h3>
+                    <p style="color: #d1d5db; line-height: 1.6;">Professional AI tools for content creators.</p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 style="color: #f9fafb; margin-bottom: 1rem;">Product</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><a href="/" style="color: #d1d5db; text-decoration: none;">Home</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/prompt-wizard/step/1" style="color: #d1d5db; text-decoration: none;">Prompt Wizard</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#pricing" style="color: #d1d5db; text-decoration: none;">Pricing</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/dashboard" style="color: #d1d5db; text-decoration: none;">Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 style="color: #f9fafb; margin-bottom: 1rem;">Legal</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><a href="/terms" style="color: #d1d5db; text-decoration: none;">Terms of Service</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/privacy" style="color: #d1d5db; text-decoration: none;">Privacy Policy</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/refunds" style="color: #d1d5db; text-decoration: none;">Refund Policy</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/contact" style="color: #d1d5db; text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social -->
+                <div>
+                    <h4 style="color: #f9fafb; margin-bottom: 1.5rem;">Connect</h4>
+                    <div style="display: flex; justify-content: flex-start; gap: 1.2rem; font-size: 1.5rem; flex-wrap: wrap;">
+                        <a href="https://reddit.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#ff5700'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-reddit"></i></a>
+                        <a href="https://youtube.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-youtube"></i></a>
+                        <a href="https://linkedin.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#0077b5'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://discord.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#5865f2'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-discord"></i></a>
+                    </div>
+                    <p style="margin-top: 2rem; font-size: 0.9rem; color: #9ca3af;">
+                        © 2024 Prompts Alchemy. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SIGNUP MODAL -->
+    <div id="signupModal" class="modal">
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; max-width: 400px; width: 90%;">
+            <h2 style="color: #333; margin-bottom: 1rem; font-size: 1.75rem;">Join Prompts Alchemy</h2>
+            <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.6;">Enter your email to get started. We'll send you a login link.</p>
+            <input type="email" id="signupEmail" placeholder="you@example.com" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+            <button onclick="submitSignup()" style="width: 100%; padding: 0.75rem; background: #0cc0df; color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 1rem; cursor: pointer;">Send Magic Link</button>
+            <button onclick="hideSignupModal()" style="width: 100%; margin-top: 0.5rem; padding: 0.75rem; background: transparent; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function showSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+        
+        function hideSignupModal() {
+            document.getElementById('signupModal').style.display = 'none';
+        }
+        
+        function submitSignup() {
+            const email = document.getElementById('signupEmail').value;
+            if (email && email.includes('@')) {
+                alert('Thank you! Signup launching soon. We\'ll notify you at ' + email);
+                hideSignupModal();
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('signupModal').addEventListener('click', function(e) {
+            if (e.target.id === 'signupModal') {
+                hideSignupModal();
+            }
+        });
+        
+        // Smooth scroll for pricing anchor
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#pricing') {
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
