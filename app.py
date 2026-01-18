@@ -148,8 +148,8 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             width: {progress_percent}%;
         }}
         
-        /* Step cards */
-        .step-card {{
+        /* Step cards - Lighter text */
+        .step-card {
             background: #1e293b;
             border: 2px solid #334155;
             border-radius: 12px;
@@ -158,27 +158,24 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #e2e8f0;
+            color: #e2e8f0;  /* Light text */
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.75rem;
             min-height: 180px;
             justify-content: center;
-        }}
+        }
         
-        .step-card:hover {{
-            border-color: #0cc0df;
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
-        }}
-
-        /* STEP GRID - Horizontal layout */
-        .step-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);  /* 2 columns */
-            gap: 1rem;
-            margin: 2rem 0;
+        .step-card h3 {
+            color: #f1f5f9;  /* Even lighter for headers */
+            margin: 0;
+        }
+        
+        .step-card p {
+            color: #cbd5e1;  /* Medium light for descriptions */
+            margin: 0;
+            font-size: 0.9rem;
         }
         
         /* Progress steps - Horizontal circles */
