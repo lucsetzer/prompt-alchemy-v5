@@ -215,21 +215,15 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <p>© 2024 Prompts Alchemy</p>
     </footer>
     
-        <script>
-        function copyPrompt() {{
-            const output = document.querySelector('.clean-output');
-            const text = output.innerText;
-            navigator.clipboard.writeText(text).then(() => {{
-                alert('Prompt copied to clipboard!');
-            }});
-        }}
-
-        function showLoading() {{
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('generate-form').style.display = 'none';
-        }}
-    </script>
-
+            <script>
+                function copyPrompt() {{
+                    const output = document.querySelector('.clean-output');
+                    const text = output.innerText;
+                    navigator.clipboard.writeText(text).then(() => {{
+                        alert('Prompt copied!');
+                    }});
+                }}
+            </script>
 
 </body>
 </html>'''
