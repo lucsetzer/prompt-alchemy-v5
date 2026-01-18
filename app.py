@@ -383,39 +383,362 @@ async def call_deepseek_api_async(goal: str, audience: str, tone: str, platform:
 @app.get("/")
 async def home():
     content = '''
-    <article style="text-align: center; padding: 3rem 0;">
-        <h1>🧙 Prompt Wizard</h1>
-        <p class="lead" style="font-size: 1.25rem; color: #666; margin: 1rem 0 2rem 0;">
-            Transform simple ideas into powerful AI prompts
+    <!-- HERO SECTION -->
+    <section style="text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, #0cc0df 0%, #00d9ff 100%); color: white;">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Professional AI Tools for Content Creators</h1>
+        <p style="font-size: 1.5rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Transform ideas into scripts, hooks, documents, and accessible content
         </p>
-        
-        <div style="max-width: 600px; margin: 0 auto 3rem auto; text-align: left;">
-            <div class="card" style="margin-bottom: 1rem;">
-                <h4><i class="fas fa-brain" style="color: var(--primary);"></i> auDHD Friendly</h4>
-                <p>Clickable cards, clear steps, no overwhelm</p>
-            </div>
-            
-            <div class="card" style="margin-bottom: 1rem;">
-                <h4><i class="fas fa-magic" style="color: var(--primary);"></i> 6-Step Process</h4>
-                <p>Simple choices → Professional prompt</p>
-            </div>
-            
-            <div class="card">
-                <h4><i class="fas fa-robot" style="color: var(--primary);"></i> DeepSeek AI Powered</h4>
-                <p>Advanced prompt optimization</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button onclick="showSignupModal()" role="button" class="primary" style="background: white; color: #0cc0df; font-size: 1.2rem; padding: 1rem 2rem;">
+                <i class="fas fa-rocket"></i> Start Creating
+            </button>
+            <a href="#pricing" role="button" style="background: transparent; border: 2px solid white; color: white; font-size: 1.2rem; padding: 1rem 2rem;">
+                <i class="fas fa-tag"></i> View Pricing
+            </a>
+        </div>
+    </section>
+
+    <!-- VALUE PROPS -->
+    <section style="padding: 4rem 1rem; background: #f8fafc;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">Why Prompt Alchemy?</h2>
+            <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <div class="card" style="text-align: center; background: white;">
+                    <div style="font-size: 2.5rem; color: #0cc0df; margin-bottom: 1rem;">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <h3 style="color: #333;">Click-Based Interface</h3>
+                    <p style="color: #555;">No prompt engineering experience needed. Just choose and click.</p>
+                </div>
+                <div class="card" style="text-align: center; background: white;">
+                    <div style="font-size: 2.5rem; color: #0cc0df; margin-bottom: 1rem;">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 style="color: #333;">60-Second Results</h3>
+                    <p style="color: #555;">Professional-grade outputs in under a minute. No waiting.</p>
+                </div>
+                <div class="card" style="text-align: center; background: white;">
+                    <div style="font-size: 2.5rem; color: #0cc0df; margin-bottom: 1rem;">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 style="color: #333;">6 Specialized Tools</h3>
+                    <p style="color: #555;">From prompts to scripts to accessibility audits.</p>
+                </div>
             </div>
         </div>
-        
-        <a href="/prompt-wizard/step/1" role="button" class="primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
-            <i class="fas fa-play-circle"></i> Start Wizard
-        </a>
-        
-        <div style="margin-top: 3rem; color: #888; font-size: 0.9rem;">
-            <p>No login required • All processing happens in your browser • Free to use</p>
+    </section>
+
+    <!-- WIZARDS GRID -->
+    <section style="padding: 4rem 1rem;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">AI Wizard Suite</h2>
+            <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <!-- Prompt Wizard -->
+                <div class="card" style="background: white;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; color: #0cc0df;">
+                            <i class="fas fa-hat-wizard"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #333;">Prompt Wizard</h3>
+                            <small style="color: #10b981;">✅ Live • 2 tokens/use</small>
+                        </div>
+                    </div>
+                    <p style="color: #555;">Create optimized AI prompts for any platform.</p>
+                    <button onclick="showSignupModal()" class="secondary" style="width: 100%; margin-top: 1rem;">
+                        Try Now
+                    </button>
+                </div>
+
+                <!-- Hook Wizard -->
+                <div class="card" style="background: white;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; color: #9ca3af;">
+                            <i class="fas fa-fish"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #333;">Hook Wizard</h3>
+                            <small style="color: #6b7280;">🔜 Coming Soon • 2 tokens/use</small>
+                        </div>
+                    </div>
+                    <p style="color: #555;">Generate 3 engaging hooks for content.</p>
+                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                </div>
+
+                <!-- Document Wizard -->
+                <div class="card" style="background: white;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; color: #9ca3af;">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #333;">Document Wizard</h3>
+                            <small style="color: #6b7280;">🔜 Coming Soon • 3 tokens/use</small>
+                        </div>
+                    </div>
+                    <p style="color: #555;">Analyze legal/medical documents, explain clauses.</p>
+                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                </div>
+
+                <!-- Thumbnail Wizard -->
+                <div class="card" style="background: white;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; color: #9ca3af;">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #333;">Thumbnail Wizard</h3>
+                            <small style="color: #6b7280;">🔜 Coming Soon • 3 tokens/use</small>
+                        </div>
+                    </div>
+                    <p style="color: #555;">Score + improve thumbnails for platforms.</p>
+                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                </div>
+
+                <!-- Script Wizard -->
+                <div class="card" style="background: white;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; color: #9ca3af;">
+                            <i class="fas fa-scroll"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #333;">Script Wizard</h3>
+                            <small style="color: #6b7280;">🔜 Coming Soon • 1 token/use</small>
+                        </div>
+                    </div>
+                    <p style="color: #555;">Create video scripts from simple inputs.</p>
+                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                </div>
+
+                <!-- Accessibility Wizard -->
+                <div class="card" style="background: white;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2rem; color: #9ca3af;">
+                            <i class="fas fa-universal-access"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #333;">Accessibility Wizard</h3>
+                            <small style="color: #6b7280;">🔜 Coming Soon • 1 token/use</small>
+                        </div>
+                    </div>
+                    <p style="color: #555;">Audit + fix accessibility issues.</p>
+                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                </div>
+            </div>
         </div>
-    </article>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing" style="padding: 4rem 1rem; background: #f8fafc;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">Simple, Transparent Pricing</h2>
+            
+            <!-- Monthly Plans -->
+            <h3 style="text-align: center; margin-bottom: 2rem; color: #444;">Monthly Plans</h3>
+            <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+                <!-- Free Plan -->
+                <div class="card" style="text-align: center; background: white;">
+                    <h3 style="color: #333;">Free</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $0<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
+                        <li>10 tokens monthly</li>
+                        <li>Prompt Wizard only</li>
+                        <li>Basic templates</li>
+                    </ul>
+                    <button onclick="showSignupModal()" class="secondary" style="width: 100%;">Get Started</button>
+                </div>
+
+                <!-- Student Plan -->
+                <div class="card" style="text-align: center; background: white; border: 2px solid #0cc0df; position: relative;">
+                    <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #0cc0df; color: white; padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.8rem;">
+                        Popular
+                    </div>
+                    <h3 style="color: #333;">Student</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $9.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
+                        <li>50 tokens monthly</li>
+                        <li>All 6 wizards</li>
+                        <li>Student ID required</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%;">Choose Student</button>
+                </div>
+
+                <!-- Creator Plan -->
+                <div class="card" style="text-align: center; background: white;">
+                    <h3 style="color: #333;">Creator</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $19.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
+                        <li>125 tokens monthly</li>
+                        <li>Priority generation</li>
+                        <li>Advanced templates</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%;">Choose Creator</button>
+                </div>
+
+                <!-- Agency Plan -->
+                <div class="card" style="text-align: center; background: white;">
+                    <h3 style="color: #333;">Agency</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $49.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
+                        <li>500 shared tokens</li>
+                        <li>Team management</li>
+                        <li>Custom branding</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%;">Choose Agency</button>
+                </div>
+            </div>
+
+            <!-- Token Packs -->
+            <div style="margin-top: 4rem; text-align: center;">
+                <h3 style="margin-bottom: 2rem; color: #444;">Need More Tokens? Buy Token Packs</h3>
+                <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
+                        <h4 style="margin: 0; color: #333;">Mini Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$4.99</div>
+                        <div style="color: #0cc0df; font-weight: bold;">25 tokens</div>
+                        <small style="color: #6b7280;">$0.20/token</small>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
+                        <h4 style="margin: 0; color: #333;">Creator Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$14.99</div>
+                        <div style="color: #0cc0df; font-weight: bold;">100 tokens</div>
+                        <small style="color: #6b7280;">$0.15/token</small>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
+                        <h4 style="margin: 0; color: #333;">Agency Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$39.99</div>
+                        <div style="color: #0cc0df; font-weight: bold;">300 tokens</div>
+                        <small style="color: #6b7280;">$0.13/token</small>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
+                        <h4 style="margin: 0; color: #333;">Mega Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$99.99</div>
+                        <div style="color: #0cc0df; font-weight: bold;">1000 tokens</div>
+                        <small style="color: #6b7280;">$0.10/token</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background: #1f2937; color: white; padding: 3rem 1rem;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto;">
+            <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+                <!-- Brand -->
+                <div>
+                    <h3 style="color: #0cc0df;">
+                        <i class="fas fa-hat-wizard"></i> Prompt Alchemy
+                    </h3>
+                    <p style="color: #d1d5db;">Professional AI tools for content creators.</p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 style="color: #f9fafb;">Product</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="/" style="color: #d1d5db; text-decoration: none;">Home</a></li>
+                        <li><a href="/prompt-wizard/step/1" style="color: #d1d5db; text-decoration: none;">Prompt Wizard</a></li>
+                        <li><a href="#pricing" style="color: #d1d5db; text-decoration: none;">Pricing</a></li>
+                        <li><a href="/dashboard" style="color: #d1d5db; text-decoration: none;">Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 style="color: #f9fafb;">Legal</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="/terms" style="color: #d1d5db; text-decoration: none;">Terms of Service</a></li>
+                        <li><a href="/privacy" style="color: #d1d5db; text-decoration: none;">Privacy Policy</a></li>
+                        <li><a href="/refunds" style="color: #d1d5db; text-decoration: none;">Refund Policy</a></li>
+                        <li><a href="/contact" style="color: #d1d5db; text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social -->
+                <div>
+                    <h4 style="color: #f9fafb;">Connect</h4>
+                    <div style="display: flex; gap: 1rem; font-size: 1.5rem;">
+                        <a href="https://reddit.com" style="color: #d1d5db;"><i class="fab fa-reddit"></i></a>
+                        <a href="https://youtube.com" style="color: #d1d5db;"><i class="fab fa-youtube"></i></a>
+                        <a href="https://linkedin.com" style="color: #d1d5db;"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://discord.com" style="color: #d1d5db;"><i class="fab fa-discord"></i></a>
+                        <a href="mailto:hello@promptsalchemy.com" style="color: #d1d5db;"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #9ca3af;">
+                        © 2024 Prompt Alchemy. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SIGNUP MODAL (Hidden by default) -->
+    <div id="signupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 400px; width: 90%;">
+            <h2 style="color: #333; margin-bottom: 1rem;">Join Prompt Alchemy</h2>
+            <p style="color: #555; margin-bottom: 1.5rem;">Enter your email to get started. We\'ll send you a login link.</p>
+            <input type="email" id="signupEmail" placeholder="you@example.com" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 6px;">
+            <button onclick="submitSignup()" class="primary" style="width: 100%; padding: 0.75rem;">Send Magic Link</button>
+            <button onclick="hideSignupModal()" style="width: 100%; margin-top: 0.5rem; background: transparent; color: #6b7280;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function showSignupModal() {{
+            document.getElementById('signupModal').style.display = 'flex';
+        }}
+        
+        function hideSignupModal() {{
+            document.getElementById('signupModal').style.display = 'none';
+        }}
+        
+        function submitSignup() {{
+            const email = document.getElementById('signupEmail').value;
+            if (email && email.includes('@')) {{
+                alert('Thank you! Signup launching soon. We\'ll notify you at ' + email);
+                hideSignupModal();
+            }} else {{
+                alert('Please enter a valid email address.');
+            }}
+        }}
+        
+        // Close modal when clicking outside
+        document.getElementById('signupModal').addEventListener('click', function(e) {{
+            if (e.target.id === 'signupModal') {{
+                hideSignupModal();
+            }}
+        }});
+        
+        // Smooth scroll for pricing anchor
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {{
+            anchor.addEventListener('click', function (e) {{
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#pricing') {{
+                    document.querySelector(targetId).scrollIntoView({{
+                        behavior: 'smooth'
+                    }});
+                }}
+            }});
+        }});
+    </script>
     '''
-    return layout("Home - Prompt Wizard", content, step=0)
+    
+    return layout("Prompt Alchemy - Professional AI Tools", content, step=0)
 
 # ========== STEP 1: GOAL SELECTION ==========
 @app.get("/prompt-wizard/step/1")
