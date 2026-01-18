@@ -215,7 +215,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <p>© 2024 Prompts Alchemy</p>
     </footer>
     
-    <script>
+        <script>
         function copyPrompt() {{
             const output = document.querySelector('.clean-output');
             const text = output.innerText;
@@ -224,12 +224,11 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             }});
         }}
 
-        function showLoading() {
+        function showLoading() {{
             document.getElementById('loading').style.display = 'block';
             document.getElementById('generate-form').style.display = 'none';
-        }
+        }}
     </script>
-
 
 
 </body>
@@ -1226,6 +1225,67 @@ async def test_simple():
         "timestamp": time.time(),
         "render_service": os.getenv("RENDER_SERVICE_ID", "local")
     }
+
+
+@app.get("/check-api-status")
+async def check_api_status():
+    """Check if DeepSeek API key has credits"""
+    import requests
+    
+    api_key = os.getenv("DEEPSEEK_API_KEY", "")
+    
+    if not api_key:
+        return {
+            "status": "❌ No API key found",
+            "error": "DEEPSEEK_API_KEY environment variable not set"
+        }
+    
+    try:
+        # Try a minimal request
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "model": "deepseek-chat",
+            "messages": [{"role": "user", "content": "Say 'API test'"}],
+            "max_tokens": 5
+        }
+        
+        response = requests.post(
+            "https://api.deepseek.com/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            return {
+                "status": "✅ API is working",
+                "response": response.json()["choices"][0]["message"]["content"],
+                "tokens_used": response.json()["usage"]["total_tokens"]
+            }
+        elif response.status_code == 401:
+            return {
+                "status": "❌ Unauthorized",
+                "error": "Invalid API key or expired"
+            }
+        elif response.status_code == 429:
+            return {
+                "status": "❌ Rate limited",
+                "error": "Too many requests or quota exceeded"
+            }
+        else:
+            return {
+                "status": f"❌ Error {response.status_code}",
+                "error": response.text[:200]
+            }
+            
+    except requests.exceptions.Timeout:
+        return {"status": "❌ Timeout", "error": "Request timed out"}
+    except Exception as e:
+        return {"status": "❌ Exception", "error": str(e)}
 
 
 # ========== RUN THE APP ==========
