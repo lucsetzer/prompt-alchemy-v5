@@ -167,7 +167,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         }}
 
         /* Modal styles */
-        .modal-backdrop {
+        .modal-backdrop {{
             position: fixed;
             top: 0;
             left: 0;
@@ -178,15 +178,15 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             display: flex;
             justify-content: center;
             align-items: center;
-        }
+        }}
         
-        .modal-content {
+        .modal-content {{
             background: white;
             padding: 2rem;
             border-radius: 12px;
             max-width: 400px;
             width: 90%;
-        }
+        }}
 
         
         .clean-output {{
