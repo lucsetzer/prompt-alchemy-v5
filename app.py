@@ -139,7 +139,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             justify-content: space-between;
             margin-top: 0.5rem;
             font-size: 0.85rem;
-            color: #555555;
+            color: #999999 !important;
         }}
         
         .step-card {{
