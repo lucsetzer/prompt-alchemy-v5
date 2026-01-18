@@ -18,8 +18,8 @@ from fastapi import Request
 
 app = FastAPI(title="Prompt Wizard")
 templates = Jinja2Templates(directory="templates") 
-app.include_router(dashboard_router)
-app.include_router(script_wizard_router)
+#app.include_router(dashboard_router)
+#app.include_router(script_wizard_router)
 
 # ========== ICON MAPPING ==========
 ICON_MAP = {
