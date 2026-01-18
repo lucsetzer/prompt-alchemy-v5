@@ -238,75 +238,89 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     return HTMLResponse(content=html)
     
 # ========== DEEPSEEK API FUNCTION ==========
-def call_deepseek_api(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
-    """Call DeepSeek API with better error handling"""
+# Add this import at the top
+import httpx
+from functools import lru_cache
+
+# Create a shared HTTP client with connection pooling
+@lru_cache()
+def get_http_client():
+    """Get a shared HTTP client with connection pooling"""
+    return httpx.AsyncClient(
+        timeout=30.0,
+        limits=httpx.Limits(max_keepalive_connections=5, max_connections=10),
+        http2=True  # HTTP/2 can be faster
+    )
+
+async def call_deepseek_api_optimized(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
+    """Optimized async API call with better error handling and fallback"""
     
     api_key = os.getenv("DEEPSEEK_API_KEY", "")
     
     if not api_key:
+        print("[DEBUG] No API key found, using fallback")
         return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
     
-    # Try multiple times with increasing delays
-    max_retries = 3
-    for attempt in range(max_retries):
-        try:
-            headers = {
+    # Use shared client
+    client = get_http_client()
+    
+    try:
+        # Log start time for debugging
+        import time
+        start_time = time.time()
+        
+        response = await client.post(
+            "https://api.deepseek.com/chat/completions",
+            headers={
                 "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
-            }
-            
-            data = {
+                "Content-Type": "application/json",
+                "User-Agent": "PromptsAlchemy/1.0"
+            },
+            json={
                 "model": "deepseek-chat",
                 "messages": [
                     {
-                        "role": "system", 
-                        "content": "You are a Prompt Engineering Expert. Create optimized prompts. DO NOT answer the user's question, only create prompt structures."
+                        "role": "system",
+                        "content": "You are a prompt engineering expert. Create optimized prompts only."
                     },
                     {
                         "role": "user",
-                        "content": f"Create a detailed prompt for: {user_prompt}\nGoal: {goal}\nAudience: {audience}\nTone: {tone}\nPlatform: {platform}"
+                        "content": f"""Please create an optimized prompt with these parameters:
+                        - Goal: {goal}
+                        - Audience: {audience}
+                        - Platform: {platform}
+                        - Tone: {tone}
+                        
+                        Original user request: {user_prompt}
+                        
+                        Create a prompt that the user can copy/paste directly into {platform.capitalize()}.
+                        Format it clearly with sections."""
                     }
                 ],
                 "temperature": 0.7,
-                "max_tokens": 800  # Reduced from 1000
+                "max_tokens": 500,  # Reduced for faster response
+                "stream": False  # Ensure not streaming
             }
-            
-            # SHORTER timeout for faster failure
-            response = requests.post(
-                "https://api.deepseek.com/chat/completions",
-                headers=headers,
-                json=data,
-                timeout=15  # 15 seconds instead of 30
-            )
-            
-            if response.status_code == 200:
-                result = response.json()
-                content = result["choices"][0]["message"]["content"].strip()
-                
-                # Ensure it's a prompt, not an answer
-                if "prompt" not in content.lower() and "role" not in content.lower():
-                    content = f"## Optimized Prompt for {platform}\n\n{content}"
-                
-                return content
-            else:
-                # If not 200, fallback
-                break
-                
-        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
-            if attempt < max_retries - 1:
-                # Wait before retry (1s, then 2s, then 4s)
-                import time
-                time.sleep(2 ** attempt)
-                continue
-            else:
-                # All retries failed
-                return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
-        except Exception as e:
-            # Other errors
+        )
+        
+        elapsed = time.time() - start_time
+        print(f"[DEBUG] API call took {elapsed:.2f} seconds, status: {response.status_code}")
+        
+        if response.status_code == 200:
+            result = response.json()
+            content = result["choices"][0]["message"]["content"].strip()
+            return content
+        else:
+            print(f"[ERROR] API returned {response.status_code}: {response.text[:200]}")
             return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
-    
-    return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
-
+            
+    except httpx.TimeoutException:
+        print("[ERROR] API timeout")
+        return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+    except Exception as e:
+        print(f"[ERROR] API call failed: {str(e)}")
+        return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+        
 def get_fallback_prompt(goal, audience, tone, platform, user_prompt):
     """Generate a good fallback prompt when API fails"""
     return f"""## Role & Context
