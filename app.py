@@ -431,13 +431,16 @@ async def step1():
     
     goal_cards = ""
     for value, label, description in goals:
+        # Get icon from ICON_MAP
+        icon_class = ICON_MAP.get(value, "fa-solid fa-question")
+        
         goal_cards += f'''
         <a href="/prompt-wizard/step/2?goal={value}" class="step-card">
             <div class="step-icon">
-                <i class="fas fa-comment-dots"></i>
+                <i class="{icon_class}"></i>
             </div>
-            <h3 style="margin: 0; color: #222;">{label}</h3>
-            <p style="margin: 0; color: #444; font-size: 0.9rem;">{description}</p>
+            <h3 style="margin: 0; color: #333;">{label}</h3>
+            <p style="margin: 0; color: #555; font-size: 0.9rem;">{description}</p>
         </a>
         '''
     
@@ -477,7 +480,6 @@ async def step1():
     '''
     
     return layout("Step 1: Goal Selection", content, step=1)
-
 # ========== STEP 2: AUDIENCE SELECTION ==========
 @app.get("/prompt-wizard/step/2")
 async def step2(goal: str = Query("explain")):
