@@ -1226,81 +1226,57 @@ async def prompt_wizard_landing(request: Request):
         </div>
     </div>
     
-    <script>
-        // Show auth modal when starting wizard
-        function startWizard() {{
-            document.getElementById('authModal').style.display = 'flex';
+    # In your landing page route, find this JavaScript section:
+<script>
+    // Submit auth form
+    async function submitAuth(event) {{
+        event.preventDefault();
+        const email = document.getElementById('authEmail').value;
+        
+        if (!email || !email.includes('@')) {{
+            alert('Please enter a valid email address.');
+            return;
         }}
         
-        // Hide auth modal
-        function hideAuthModal() {{
-            document.getElementById('authModal').style.display = 'none';
-        }}
+        // Show loading state
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
         
-        // Submit auth form
-        async function submitAuth(event) {{
-            event.preventDefault();
-            const email = document.getElementById('authEmail').value;
+        try {{
+            // Send email to backend
+            const response = await fetch('/api/auth/request-login', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }},
+                body: JSON.stringify({{ email: email }})
+            }});
             
-            if (!email || !email.includes('@')) {{
-                alert('Please enter a valid email address.');
-                return;
-            }}
+            const result = await response.json();
             
-            // Show loading state
-            const submitBtn = event.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-            
-            try {{
-                // Send email to backend
-                const response = await fetch('/api/auth/request-login', {{
-                    method: 'POST',
-                    headers: {{ 'Content-Type': 'application/json' }},
-                    body: JSON.stringify({{ email: email }})
-                }});
-                
-                const result = await response.json();
-                
-                if (response.ok) {{
-                    // Success - show confirmation
-                    hideAuthModal();
-                    alert('Check your email for a login link! For now, we\'ll redirect you to the wizard.');
-                    
-                    const magicLink = `${window.location.origin}/api/auth/login?token=${result.demo_token}`;
-alert(`For demo: Click this link to login:\n\n${magicLink}\n\n(In production, this would be emailed to you.)`);
-                    
-                    // Store email in localStorage for demo
-                    localStorage.setItem('user_email', email);
-                    
-                }} else {{
-                    alert('Error: ' + (result.detail || 'Something went wrong'));
-                }}
-                
-            }} catch (error) {{
-                alert('Network error. Please try again.');
-            }} finally {{
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }}
-        }}
-        
-        // Close modal when clicking outside
-        document.getElementById('authModal').addEventListener('click', function(e) {{
-            if (e.target.id === 'authModal') {{
+            if (response.ok) {{
+                // Success - show confirmation
                 hideAuthModal();
+                
+                // SHOW MAGIC LINK FOR DEMO
+                const magicLink = window.location.origin + '/api/auth/login?token=' + result.demo_token;
+                alert('For demo: Click this link to login:\\n\\n' + magicLink + '\\n\\n(In production, this would be emailed to you.)');
+                
+                // Store email in localStorage for demo
+                localStorage.setItem('user_email', email);
+                
+            }} else {{
+                alert('Error: ' + (result.detail || 'Something went wrong'));
             }}
-        }});
-        
-        // Check if user is already "logged in" (demo)
-        const userEmail = localStorage.getItem('user_email');
-        if (userEmail) {{
-            // Update UI to show logged in state
-            document.querySelector('nav .nav-inner div:last-child').innerHTML += 
-                '<span style="margin-left: 1.5rem; color: #0cc0df;"><i class="fas fa-user"></i> ' + userEmail + '</span>';
+            
+        }} catch (error) {{
+            alert('Network error. Please try again.');
+        }} finally {{
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }}
-    </script>
+    }}
+</script>
 </body>
 </html>'''
     
