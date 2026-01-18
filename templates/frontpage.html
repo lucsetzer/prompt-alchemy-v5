@@ -6,22 +6,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Reset container for full width */
-        body {
+        /* Reset for full width */
+        * {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            box-sizing: border-box;
         }
         
-        /* Navigation - matches wizard */
-        nav.container {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        .main-nav {
             background: white;
             border-bottom: 1px solid #e5e7eb;
             padding: 1rem 0;
-            max-width: 100%;
         }
         
-        nav .container {
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
@@ -30,14 +34,50 @@
             padding: 0 1rem;
         }
         
-        /* Full width sections */
-        .full-width-section {
-            width: 100%;
-            padding-left: 0;
-            padding-right: 0;
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
         }
         
-        /* Consistent cards */
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .nav-links a:hover {
+            color: #0cc0df;
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: #0cc0df;
+            color: white;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+        }
+        
+        .section-light {
+            background: #f8fafc;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Cards */
         .card {
             background: white;
             border-radius: 12px;
@@ -45,10 +85,18 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         
-        /* Grid */
+        /* Grids */
         .grid {
             display: grid;
             gap: 2rem;
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
         }
         
         /* Modal */
@@ -64,54 +112,298 @@
             justify-content: center;
             align-items: center;
         }
+        
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 4rem 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- NAVIGATION -->
-    <nav class="container">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; width: 100%;">
-            <ul style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 2rem;">
-                <li>
-                    <strong>
-                        <a href="/" style="color: #0a8ea8; text-decoration: none; font-size: 1.2rem;">
-                            <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
-                        </a>
-                    </strong>
-                </li>
-            </ul>
-            <ul style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 1.5rem;">
-                <li><a href="/prompt-wizard/step/1" style="text-decoration: none;"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
-                <li><a href="#pricing" style="text-decoration: none;"><i class="fas fa-tag"></i> Pricing</a></li>
-                <li><a href="/dashboard" style="text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div>
+                <a href="/" style="color: #0a8ea8; text-decoration: none; font-size: 1.2rem;">
+                    <i class="fa-solid fa-hat-wizard"></i> <strong>Prompts Alchemy</strong>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/prompt-wizard/step/1"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
+                <li><a href="#pricing"><i class="fas fa-tag"></i> Pricing</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section style="text-align: center; padding: 6rem 2rem; background: #09a7c2; color: white; width: 100%;">
-        <div style="max-width: 1200px; margin: 0 auto;">
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-container">
             <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; font-weight: 700;">Professional AI Tools for Content Creators</h1>
-            <p style="font-size: 1.5rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+            <p style="font-size: 1.5rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
                 Transform ideas into scripts, hooks, documents, and accessible content
             </p>
             <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                <button onclick="showSignupModal()" role="button" style="background: white; color: #0cc0df; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
+                <button onclick="showSignupModal()" style="background: white; color: #0cc0df; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
                     <i class="fas fa-rocket"></i> Start Creating
                 </button>
-                <a href="#pricing" role="button" style="background: transparent; border: 2px solid white; color: white; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                <a href="#pricing" style="background: transparent; border: 2px solid white; color: white; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
                     <i class="fas fa-tag"></i> View Pricing
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- REST OF YOUR FRONTPAGE CONTENT GOES HERE -->
-    <!-- Copy all the sections from your frontpage but remove the footer -->
-    
-    <!-- FOOTER (only one, at the bottom) -->
-    <footer style="background: #1f2937; color: white; padding: 4rem 2rem; width: 100%;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div class="grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem;">
+    <!-- VALUE PROPS -->
+    <section class="section section-light">
+        <div class="section-container">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">Why Prompts Alchemy?</h2>
+            <div class="grid grid-3">
+                <!-- Card 1 -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1.5rem;">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">Click-Based Interface</h3>
+                    <p style="color: #555;">No prompt engineering experience needed. Just choose and click.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1.5rem;">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">60-Second Results</h3>
+                    <p style="color: #555;">Professional-grade outputs in under a minute. No waiting.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1.5rem;">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">6 Specialized Tools</h3>
+                    <p style="color: #555;">From prompts to scripts to accessibility audits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WIZARDS GRID -->
+    <section class="section">
+        <div class="section-container">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">AI Wizard Suite</h2>
+            <div class="grid grid-3">
+                <!-- Prompt -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-wand"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Prompt</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem;">Create optimized AI prompts</p>
+                    <button onclick="showSignupModal()" style="width: 100%; padding: 0.75rem; background: #0cc0df; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                        2 tokens • Try Now
+                    </button>
+                </div>
+
+                <!-- Hook -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Hook</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem;">Generate 3 engaging hooks</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">
+                        2 tokens • Coming Soon
+                    </button>
+                </div>
+
+                <!-- Document -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Document</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem;">Analyze legal/medical docs</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">
+                        3 tokens • Coming Soon
+                    </button>
+                </div>
+
+                <!-- Thumbnail -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Thumbnail</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem;">Score + improve thumbnails</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">
+                        3 tokens • Coming Soon
+                    </button>
+                </div>
+
+                <!-- Script -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Script</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem;">Create video scripts</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">
+                        1 token • Coming Soon
+                    </button>
+                </div>
+
+                <!-- Accessibility -->
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-universal-access"></i>
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Accessibility</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem;">Audit + fix accessibility</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">
+                        1 token • Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="section section-light">
+        <div class="section-container">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">Simple, Transparent Pricing</h2>
+            
+            <!-- Free Callout -->
+            <div class="card" style="text-align: center; margin-bottom: 3rem;">
+                <h3 style="color: #333; font-size: 2rem; margin-bottom: 1rem;">Get Started Free</h3>
+                <p style="color: #555; font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Try Prompt Wizard with <strong>10 free tokens</strong>. No credit card required.
+                </p>
+                <button onclick="showSignupModal()" style="background: #0cc0df; color: white; font-size: 1.2rem; padding: 1rem 2.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    <i class="fas fa-gift"></i> Get 10 Free Tokens
+                </button>
+            </div>
+            
+            <!-- Monthly Plans -->
+            <div class="grid grid-3">
+                <!-- Student Plan -->
+                <div class="card" style="text-align: center; border: 2px solid #0cc0df; position: relative;">
+                    
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem; padding-top: 0.5rem;">Student</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $9.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: center; margin: 1.5rem 0; color: #555; list-style: none; padding: 0; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ 50 tokens monthly</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Student ID required</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Email support</li>
+                    </ul>
+                    <button onclick="showSignupModal()" style="width: 100%; padding: 0.9rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 0.5rem; cursor: pointer;">
+                        Choose Student
+                    </button>
+                </div>
+
+                <!-- Creator Plan -->
+                <div class="card" style="text-align: center;">
+                    <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0cc0df; color: white; padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.9rem;">
+                        Most Popular
+                    </div>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">Creator</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $19.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: center; margin: 1.5rem 0; color: #555; list-style: none; padding: 0; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ 125 tokens monthly</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ All features</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Email support</li>
+                    </ul>
+                    <button onclick="showSignupModal()" style="width: 100%; padding: 0.9rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 0.5rem; cursor: pointer;">
+                        Choose Creator
+                    </button>
+                </div>
+
+                <!-- Agency Plan -->
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">Agency</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                        $49.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
+                    </div>
+                    <ul style="text-align: center; margin: 1.5rem 0; color: #555; list-style: none; padding: 0; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ 500 shared tokens</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ All features</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Email support</li>
+                    </ul>
+                    <button onclick="showSignupModal()" style="width: 100%; padding: 0.9rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 0.5rem; cursor: pointer;">
+                        Choose Agency
+                    </button>
+                </div>
+            </div>
+
+            <!-- Token Packs -->
+            <div style="margin-top: 4rem; text-align: center;">
+                <h3 style="margin-bottom: 2rem; color: #444; font-size: 1.75rem;">Need More Tokens? Buy Token Packs</h3>
+                <div class="grid grid-4">
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Mini Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$4.99</div>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">25 tokens</div>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Creator Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$14.99</div>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">100 tokens</div>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Agency Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$39.99</div>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">300 tokens</div>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Mega Boost</h4>
+                        <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$99.99</div>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">1000 tokens</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="grid grid-4">
                 <!-- Brand -->
                 <div>
                     <h3 style="color: #0cc0df; font-size: 1.5rem; margin-bottom: 1rem;">
@@ -159,9 +451,9 @@
         </div>
     </footer>
 
-    <!-- SIGNUP MODAL -->
+    <!-- MODAL -->
     <div id="signupModal" class="modal">
-        <div style="background: white; padding: 2.5rem; border-radius: 12px; max-width: 400px; width: 90%;">
+        <div class="modal-content">
             <h2 style="color: #333; margin-bottom: 1rem; font-size: 1.75rem;">Join Prompts Alchemy</h2>
             <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.6;">Enter your email to get started. We'll send you a login link.</p>
             <input type="email" id="signupEmail" placeholder="you@example.com" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
@@ -197,7 +489,7 @@
             }
         });
         
-        // Smooth scroll for pricing anchor
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -211,4 +503,5 @@
         });
     </script>
 </body>
+</html>
 </html>
