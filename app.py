@@ -13,8 +13,8 @@ from routes.dashboard import router as dashboard_router
 from routes.script_wizard import router as script_wizard_router
 import time
 from fastapi.templating import Jinja2Templates
-#import httpx
-#import asyncio
+from fastapi import Request
+
 
 app = FastAPI(title="Prompt Wizard")
 templates = Jinja2Templates(directory="templates") 
@@ -410,10 +410,12 @@ from fastapi.templating import Jinja2Templates
 # Initialize templates
 templates = Jinja2Templates(directory="templates")
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    # Render the standalone frontpage template
-    return templates.TemplateResponse("frontpage.html", {"request": request})
+@app.get("/")
+async def home(request: Request):  # <-- Add 'request' parameter
+    return templates.TemplateResponse(
+        "frontpage.html", 
+        {"request": request}  # <-- Required by FastAPI templates
+    )
     
 # ========== STEP 1: GOAL SELECTION ==========
 @app.get("/prompt-wizard/step/1")
