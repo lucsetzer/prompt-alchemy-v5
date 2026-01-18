@@ -165,6 +165,29 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             transform: translateY(-4px);
             box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
         }}
+
+        /* Modal styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+        }
+
         
         .clean-output {{
             background: #ffffff;
