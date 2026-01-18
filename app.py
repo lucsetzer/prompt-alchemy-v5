@@ -12,10 +12,12 @@ import json
 from routes.dashboard import router as dashboard_router
 from routes.script_wizard import router as script_wizard_router
 import time
+from fastapi.templating import Jinja2Templates
 #import httpx
 #import asyncio
 
 app = FastAPI(title="Prompt Wizard")
+templates = Jinja2Templates(directory="templates") 
 app.include_router(dashboard_router)
 app.include_router(script_wizard_router)
 
