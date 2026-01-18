@@ -1065,7 +1065,7 @@ async def prompt_wizard_landing(request: Request):
     <main class="app-main">
         <header style="text-align: center; margin-bottom: 3rem;">
             <h1 style="font-size: 3rem; margin-bottom: 1rem;">
-                <i class="fas fa-hat-wizard"></i> Prompt Wizard
+                <i class="fa-solid fa-wand"></i> Prompt Wizard
             </h1>
             <p style="font-size: 1.2rem; color: #94a3b8; max-width: 600px; margin: 0 auto;">
                 Transform simple ideas into professional AI prompts in 6 easy steps
