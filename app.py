@@ -55,6 +55,39 @@ ICON_MAP = {
     "humorous": "fa-solid fa-face-laugh-beam",
 }
 
+@app.get("/health")
+async def health_check():
+    """Simple health check endpoint"""
+    return {
+        "status": "ok",
+        "service": "Prompt Wizard",
+        "version": "1.0",
+        "timestamp": time.time()
+    }
+
+@app.get("/test")
+async def test_page():
+    """Simple test page without complex dependencies"""
+    return HTMLResponse("""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Test Page</title>
+        <style>
+            body { font-family: sans-serif; padding: 2rem; }
+            .success { color: green; }
+        </style>
+    </head>
+    <body>
+        <h1 class="success">✅ App is Running!</h1>
+        <p>Basic FastAPI app is working.</p>
+        <p><a href="/">Go to Home</a></p>
+        <p><a href="/health">Check Health Endpoint</a></p>
+    </body>
+    </html>
+    """)
+
+
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     """WORKING layout function with no syntax errors"""
@@ -1285,7 +1318,28 @@ async def check_api_status():
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
-    print(f"🚀 Starting Prompt Wizard on http://localhost:{port}")
+    
+    # Debug info
+    print("=" * 50)
+    print(f"🚀 STARTING PROMPT WIZARD")
+    print(f"📦 Python path: {sys.path}")
+    print(f"🌐 Host: 0.0.0.0")
+    print(f"🔌 Port: {port}")
+    print(f"🔑 API Key exists: {bool(os.getenv('DEEPSEEK_API_KEY', ''))}")
+    print("=" * 50)
+    
+    try:
+        uvicorn.run(
+            app, 
+            host="0.0.0.0", 
+            port=port,
+            log_level="debug"
+        )
+    except Exception as e:
+        print(f"❌ CRITICAL ERROR: {e}")
+        print(f"📝 Error type: {type(e)}")
+        import traceback
+        traceback.print_exc()
     print(f"✨ Step 1: http://localhost:{port}/prompt-wizard/step/1")
     print(f"🎨 Font Awesome Icons Enabled")
     print(f"📋 Fixed copy button positioning")
