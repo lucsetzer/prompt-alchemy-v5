@@ -99,7 +99,7 @@ async def test_page():
 
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
-    """Dark theme layout for wizard steps"""
+    """Dark theme layout for wizard steps - FIXED SYNTAX"""
     
     progress_percent = (step / 6) * 100 if step <= 6 else 100
     
@@ -148,8 +148,35 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             width: {progress_percent}%;
         }}
         
-        /* Step cards - Lighter text */
-        .step-card {
+        /* Progress steps - HORIZONTAL */
+        .progress-steps {{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }}
+        
+        .progress-step {{
+            text-align: center;
+            flex: 1;
+        }}
+        
+        .progress-step.active {{
+            color: #0cc0df;
+            font-weight: bold;
+        }}
+        
+        /* STEP GRID - 2 COLUMNS */
+        .step-grid {{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }}
+        
+        /* Step cards */
+        .step-card {{
             background: #1e293b;
             border: 2px solid #334155;
             border-radius: 12px;
@@ -158,62 +185,31 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #e2e8f0;  /* Light text */
+            color: #e2e8f0;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.75rem;
             min-height: 180px;
             justify-content: center;
-        }
+        }}
         
-        .step-card h3 {
-            color: #f1f5f9;  /* Even lighter for headers */
+        .step-card:hover {{
+            border-color: #0cc0df;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
+        }}
+        
+        .step-card h3 {{
+            color: #f1f5f9;
             margin: 0;
-        }
+        }}
         
-        .step-card p {
-            color: #cbd5e1;  /* Medium light for descriptions */
+        .step-card p {{
+            color: #cbd5e1;
             margin: 0;
             font-size: 0.9rem;
-        }
-        
-        /* Progress steps - Horizontal circles */
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-            color: #94a3b8;  /* Lighter gray for dark theme */
-        }
-        
-        .progress-step {
-            text-align: center;
-            flex: 1;
-            position: relative;
-        }
-        
-        .progress-step.active {
-            color: #0cc0df;
-            font-weight: bold;
-        }
-        
-        /* Add circle indicators */
-        .progress-step::before {
-            content: '';
-            display: block;
-            width: 12px;
-            height: 12px;
-            background: #334155;
-            border-radius: 50%;
-            margin: 0 auto 0.5rem auto;
-        }
-        
-        .progress-step.active::before {
-            background: #0cc0df;
-            box-shadow: 0 0 0 3px rgba(12, 192, 223, 0.2);
-        }
-
+        }}
         
         /* Output box */
         .clean-output {{
@@ -252,8 +248,6 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             <li><a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a></li>
         </ul>
     </nav>
-
-    {get_nav_html("wizards")}
     
     <main class="container">
         {content}
