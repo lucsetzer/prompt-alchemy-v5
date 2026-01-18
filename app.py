@@ -19,11 +19,11 @@ import secrets
 import datetime
 from fastapi.staticfiles import StaticFiles
 
+app = FastAPI(title="Prompt Wizard")
+
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-
-app = FastAPI(title="Prompt Wizard")
 templates = Jinja2Templates(directory="templates") 
 #app.include_router(dashboard_router)
 #app.include_router(script_wizard_router)
