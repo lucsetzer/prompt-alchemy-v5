@@ -14,6 +14,9 @@ import json
 import time
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
+import sqlite3
+import secrets
+import datetime
 
 
 app = FastAPI(title="Prompt Wizard")
@@ -95,6 +98,38 @@ async def test_page():
     </body>
     </html>
     """)
+
+
+def init_db():
+    """Initialize SQLite database for users"""
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    # Users table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        email TEXT PRIMARY KEY,
+        tokens INTEGER DEFAULT 10,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        last_login TIMESTAMP
+    )
+    ''')
+    
+    # Login tokens table (for magic links)
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS login_tokens (
+        token TEXT PRIMARY KEY,
+        email TEXT,
+        expires_at TIMESTAMP,
+        used INTEGER DEFAULT 0
+    )
+    ''')
+    
+    conn.commit()
+    conn.close()
+
+# Initialize on startup
+init_db()
 
 
 # ========== CORE LAYOUT FUNCTION ==========
@@ -507,6 +542,66 @@ from fastapi.templating import Jinja2Templates
 # Initialize templates
 templates = Jinja2Templates(directory="templates")
 
+@app.post("/api/auth/request-login")
+async def request_login(email: str = Body(..., embed=True)):
+    """Handle email submission for magic link login"""
+    
+    # Basic validation
+    if "@" not in email:
+        return JSONResponse(
+            {"error": "Invalid email address"},
+            status_code=400
+        )
+    
+    # Connect to database
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    try:
+        # Check if user exists
+        cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
+        user = cursor.fetchone()
+        
+        if not user:
+            # Create new user with 10 tokens
+            cursor.execute(
+                "INSERT INTO users (email, tokens) VALUES (?, 10)",
+                (email,)
+            )
+        
+        # Generate magic link token (for now, just log it)
+        token = secrets.token_urlsafe(32)
+        expires_at = datetime.datetime.now() + datetime.timedelta(hours=24)
+        
+        cursor.execute(
+            """INSERT INTO login_tokens (token, email, expires_at) 
+               VALUES (?, ?, ?)""",
+            (token, email, expires_at)
+        )
+        
+        conn.commit()
+        
+        # In production: Send email with magic link
+        # For now, just log it
+        print(f"🔐 Login token for {email}: {token}")
+        print(f"📧 Magic link: https://yourdomain.com/api/auth/login?token={token}")
+        
+        return {
+            "success": True,
+            "message": "Check your email for a login link",
+            "demo_token": token  # For demo only
+        }
+        
+    except Exception as e:
+        conn.rollback()
+        return JSONResponse(
+            {"error": "Database error", "detail": str(e)},
+            status_code=500
+        )
+    finally:
+        conn.close()
+
+
 @app.get("/")
 async def home(request: Request):  # <-- Add 'request' parameter
     return templates.TemplateResponse(
@@ -524,6 +619,368 @@ async def dashboard(request: Request):
             "user_tokens": 0
         }
     )
+
+
+@app.get("/prompt-wizard")
+async def prompt_wizard_landing(request: Request):
+    """Landing page with auth integration"""
+    
+    html = f'''
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Prompt Wizard - Prompts Alchemy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* DARK THEME */
+        body {{
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }}
+        
+        /* FULL-WIDTH NAV */
+        .app-nav {{
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 1rem 0;
+            width: 100%;
+        }}
+        
+        .nav-inner {{
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }}
+        
+        .app-nav a {{
+            color: #cbd5e1;
+            text-decoration: none;
+        }}
+        
+        .app-nav a:hover {{
+            color: #0cc0df;
+        }}
+        
+        /* MAIN CONTENT */
+        .app-main {{
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }}
+        
+        /* Cards */
+        .card {{
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }}
+        
+        /* Steps visualization */
+        .step-visual {{
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }}
+        
+        .step-circle {{
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            background: #334155;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }}
+        
+        .step-circle:hover {{
+            background: #475569;
+            transform: translateY(-2px);
+        }}
+        
+        .step-circle .number {{
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #0cc0df;
+            margin-bottom: 0.25rem;
+        }}
+        
+        .step-circle .label {{
+            font-size: 0.8rem;
+            color: #cbd5e1;
+        }}
+        
+        /* CTA Button */
+        .cta-button {{
+            background: linear-gradient(135deg, #0cc0df, #00d9ff);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }}
+        
+        .cta-button:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(12, 192, 223, 0.3);
+            color: white;
+        }}
+        
+        /* Token badge */
+        .token-badge {{
+            background: rgba(12, 192, 223, 0.1);
+            color: #0cc0df;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 1rem 0;
+            border: 1px solid rgba(12, 192, 223, 0.3);
+        }}
+        
+        /* Modal */
+        .modal {{
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }}
+        
+        .modal-content {{
+            background: #1e293b;
+            padding: 2.5rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid #334155;
+        }}
+    </style>
+</head>
+<body>
+    <!-- FULL WIDTH NAV -->
+    <nav class="app-nav">
+        <div class="nav-inner">
+            <div>
+                <a href="/" style="color: #0cc0df; font-size: 1.2rem;">
+                    <i class="fa-solid fa-hat-wizard"></i> <strong>Prompts Alchemy</strong>
+                </a>
+            </div>
+            <div>
+                <a href="/" style="margin-right: 1.5rem;"><i class="fas fa-home"></i> Home</a>
+                <a href="/dashboard" style="margin-right: 1.5rem;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="/prompt-wizard" style="color: #0cc0df;"><i class="fas fa-magic"></i> Wizards</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- MAIN CONTENT -->
+    <main class="app-main">
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">
+                <i class="fas fa-hat-wizard"></i> Prompt Wizard
+            </h1>
+            <p style="font-size: 1.2rem; color: #94a3b8; max-width: 600px; margin: 0 auto;">
+                Transform simple ideas into professional AI prompts in 6 easy steps
+            </p>
+        </header>
+        
+        <!-- How it works -->
+        <div class="card">
+            <h2><i class="fas fa-play-circle"></i> How It Works</h2>
+            <p>Just click through 6 simple choices, and AI builds your perfect prompt:</p>
+            
+            <div class="step-visual">
+                <div class="step-circle">
+                    <div class="number">1</div>
+                    <div class="label">Goal</div>
+                </div>
+                <div class="step-circle">
+                    <div class="number">2</div>
+                    <div class="label">Audience</div>
+                </div>
+                <div class="step-circle">
+                    <div class="number">3</div>
+                    <div class="label">Platform</div>
+                </div>
+                <div class="step-circle">
+                    <div class="number">4</div>
+                    <div class="label">Style</div>
+                </div>
+                <div class="step-circle">
+                    <div class="number">5</div>
+                    <div class="label">Tone</div>
+                </div>
+                <div class="step-circle">
+                    <div class="number">6</div>
+                    <div class="label">Your Prompt</div>
+                </div>
+            </div>
+            
+            <div style="background: #0f172a; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border-left: 4px solid #0cc0df;">
+                <h4 style="color: #0cc0df; margin-top: 0;"><i class="fas fa-star"></i> Example Output:</h4>
+                <p style="margin: 0.5rem 0; color: #cbd5e1;">
+                    <strong>Professional prompt for ChatGPT:</strong><br>
+                    "You are an expert content strategist. Create a detailed blog post outline about sustainable energy for business executives. Use a professional tone with actionable insights..."
+                </p>
+            </div>
+        </div>
+        
+        <!-- Token info -->
+        <div class="card" style="text-align: center;">
+            <h3><i class="fas fa-coins"></i> Token Cost</h3>
+            <div class="token-badge">
+                <i class="fas fa-bolt"></i> 2 tokens per prompt
+            </div>
+            <p style="color: #94a3b8; margin: 1rem 0;">
+                New users start with <strong>10 free tokens</strong> (5 prompts!)<br>
+                No credit card required to start.
+            </p>
+        </div>
+        
+        <!-- CTA -->
+        <div style="text-align: center; margin-top: 3rem;">
+            <h2>Ready to create your perfect prompt?</h2>
+            <button onclick="startWizard()" class="cta-button">
+                <i class="fas fa-play"></i> Start Prompt Wizard
+            </button>
+            <p style="color: #94a3b8; margin-top: 1rem;">
+                <small>You'll be prompted to sign in or create an account</small>
+            </p>
+        </div>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer style="text-align: center; padding: 2rem; color: #64748b; border-top: 1px solid #334155; background: #1e293b; margin-top: 4rem;">
+        <p>© 2024 Prompts Alchemy • <a href="/terms" style="color: #94a3b8;">Terms</a> • <a href="/privacy" style="color: #94a3b8;">Privacy</a></p>
+    </footer>
+    
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0; color: #f1f5f9;"><i class="fas fa-envelope"></i> Sign In to Continue</h2>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">
+                Enter your email to start using Prompt Wizard. We'll send you a magic link.
+            </p>
+            
+            <form id="authForm" onsubmit="submitAuth(event)">
+                <input type="email" id="authEmail" placeholder="you@example.com" required
+                       style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px;">
+                
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" style="flex: 1; padding: 0.75rem; background: #0cc0df; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                        Send Magic Link
+                    </button>
+                    <button type="button" onclick="hideAuthModal()" style="padding: 0.75rem; background: transparent; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; cursor: pointer;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+            
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 1.5rem;">
+                <i class="fas fa-shield-alt"></i> No password needed. We email you a secure login link.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Show auth modal when starting wizard
+        function startWizard() {{
+            document.getElementById('authModal').style.display = 'flex';
+        }}
+        
+        // Hide auth modal
+        function hideAuthModal() {{
+            document.getElementById('authModal').style.display = 'none';
+        }}
+        
+        // Submit auth form
+        async function submitAuth(event) {{
+            event.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            
+            if (!email || !email.includes('@')) {{
+                alert('Please enter a valid email address.');
+                return;
+            }}
+            
+            // Show loading state
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            try {{
+                // Send email to backend
+                const response = await fetch('/api/auth/request-login', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{ email: email }})
+                }});
+                
+                const result = await response.json();
+                
+                if (response.ok) {{
+                    // Success - show confirmation
+                    hideAuthModal();
+                    alert('Check your email for a login link! For now, we\'ll redirect you to the wizard.');
+                    
+                    // TEMPORARY: Redirect directly since we don't have email setup
+                    setTimeout(() => {{
+                        window.location.href = '/prompt-wizard/step/1';
+                    }}, 1500);
+                    
+                    // Store email in localStorage for demo
+                    localStorage.setItem('user_email', email);
+                    
+                }} else {{
+                    alert('Error: ' + (result.detail || 'Something went wrong'));
+                }}
+                
+            }} catch (error) {{
+                alert('Network error. Please try again.');
+            }} finally {{
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }}
+        }}
+        
+        // Close modal when clicking outside
+        document.getElementById('authModal').addEventListener('click', function(e) {{
+            if (e.target.id === 'authModal') {{
+                hideAuthModal();
+            }}
+        }});
+        
+        // Check if user is already "logged in" (demo)
+        const userEmail = localStorage.getItem('user_email');
+        if (userEmail) {{
+            // Update UI to show logged in state
+            document.querySelector('nav .nav-inner div:last-child').innerHTML += 
+                '<span style="margin-left: 1.5rem; color: #0cc0df;"><i class="fas fa-user"></i> ' + userEmail + '</span>';
+        }}
+    </script>
+</body>
+</html>'''
+    
+    return HTMLResponse(content=html)
 
 
 # ========== STEP 1: GOAL SELECTION ==========
