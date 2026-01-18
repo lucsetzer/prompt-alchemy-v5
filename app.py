@@ -252,7 +252,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <ul>
             <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="/prompt-wizard/step/1"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
+            <li><a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a></li>
         </ul>
     </nav>
     
