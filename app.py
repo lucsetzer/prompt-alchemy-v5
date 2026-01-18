@@ -17,6 +17,10 @@ from fastapi import Request
 import sqlite3
 import secrets
 import datetime
+from fastapi.staticfiles import StaticFiles
+
+# Mount static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app = FastAPI(title="Prompt Wizard")
@@ -811,104 +815,42 @@ async def home(request: Request):  # <-- Add 'request' parameter
 
 @app.get("/dashboard")
 async def dashboard(request: Request, session_token: str = Cookie(None)):
-    print(f"📊 Dashboard accessed. Session token: {session_token}")
+    """Dashboard with external JavaScript - SIMPLE VERSION"""
     
     user = get_current_user(session_token)
-    print(f"📊 User: {user}")
-    
     
     if user:
-        # User is logged in
-        html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Dashboard - Prompts Alchemy</title>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-            <style>
-                /* Your dark theme CSS */
-                body {{ background: #0f172a; color: #e2e8f0; }}
-                .card {{ background: #1e293b; border: 1px solid #334155; }}
-            </style>
-        </head>
-        <body>
-            <!-- Navigation with user info -->
-            <nav class="app-nav">
-                <div class="nav-inner">
-                    <div>
-                        <a href="/" style="color: #0cc0df;">
-                            <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
-                        </a>
-                    </div>
-                    <div>
-                        <span style="color: #0cc0df; margin-right: 1.5rem;">
-                            <i class="fas fa-user"></i> {user['email']}
-                        </span>
-                        <span style="color: #fbbf24; margin-right: 1.5rem;">
-                            <i class="fas fa-coins"></i> {user['tokens']} tokens
-                        </span>
-                        <a href="/" style="margin-right: 1.5rem;">Home</a>
-                        <a href="/dashboard">Dashboard</a>
-                    </div>
-                </div>
-            </nav>
+        content = f'''
+        <article style="text-align: center; padding: 2rem 0;">
+            <h1><i class="fas fa-tachometer-alt"></i> Your Dashboard</h1>
+            <p>Welcome back, <strong>{user['email']}</strong>!</p>
             
-            <main class="app-main">
-                <h1>Your Dashboard</h1>
-                
-                <!-- Real user stats -->
-                <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0;">
-                    <div class="card" style="text-align: center;">
-                        <h3><i class="fas fa-coins"></i> Tokens</h3>
-                        <p style="font-size: 2.5rem; font-weight: bold; color: #0cc0df;">{user['tokens']}</p>
-                        <p style="color: #94a3b8;">Remaining this month</p>
-                    </div>
-                    
-                    <div class="card" style="text-align: center;">
-                        <h3><i class="fas fa-user"></i> Account</h3>
-                        <p style="color: #cbd5e1; margin: 1rem 0;">{user['email']}</p>
-                        <button onclick="logout()" style="background: #ef4444; color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer;">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </div>
-                    
-                    <div class="card" style="text-align: center;">
-                        <h3><i class="fas fa-crown"></i> Plan</h3>
-                        <p style="font-size: 1.5rem; font-weight: bold; color: #f1f5f9;">Free Tier</p>
-                        <p style="color: #94a3b8;">10 tokens/month</p>
-                        <a href="#pricing" style="color: #0cc0df;">Upgrade</a>
-                    </div>
-                </div>
-                
-                <!-- Rest of dashboard... -->
-            </main>
-            
-            <script>
-                function logout() {{
-                    document.cookie = "session_token=; path=/; max-age=0;";
-                    window.location.href = "/";
-                }}
-            </script>
-        </body>
-        </html>
-        """
+            <button id="logoutBtn" style="background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 6px; border: none; cursor: pointer;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </article>
+        
+        <!-- Rest of your dashboard HTML... -->
+        
+        <!-- LOAD EXTERNAL SCRIPT -->
+        <script src="/static/dashboard_script.js"></script>
+        '''
     else:
-        # User not logged in - show public dashboard
-        html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Dashboard - Prompts Alchemy</title>
-            <!-- Same CSS as before -->
-        </head>
-        <body>
-            <!-- Public dashboard HTML (what you already have) -->
-        </body>
-        </html>
-        """
+        content = '''
+        <article style="text-align: center; padding: 2rem 0;">
+            <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+            <p>Sign in to track your tokens and usage</p>
+            
+            <a href="/prompt-wizard" style="background: #0cc0df; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; display: inline-block;">
+                <i class="fas fa-envelope"></i> Sign In
+            </a>
+        </article>
+        
+        <!-- LOAD EXTERNAL SCRIPT (still loads for public dashboard) -->
+        <script src="/static/dashboard_script.js"></script>
+        '''
     
-    return HTMLResponse(content=html)
+    return layout("Dashboard - Prompts Alchemy", content, step=0)
 
 
 @app.get("/logout")
