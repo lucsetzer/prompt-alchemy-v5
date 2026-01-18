@@ -274,7 +274,37 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
 </html>'''
     
     return HTMLResponse(content=html)
+
+def get_nav_html(current_page="home"):
+    """Return consistent navigation HTML for all pages"""
     
+    # Define which page is active
+    active_styles = {
+        "home": 'style="color: #0cc0df !important;"',
+        "dashboard": 'style="color: #0cc0df !important;"', 
+        "wizards": 'style="color: #0cc0df !important;"'
+    }
+    
+    return f'''
+    <nav class="container">
+        <ul>
+            <li>
+                <strong>
+                    <a href="/" style="color: #0cc0df; text-decoration: none;">
+                        <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
+                    </a>
+                </strong>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="/" {active_styles.get("home", "")}><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/dashboard" {active_styles.get("dashboard", "")}><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="/prompt-wizard" {active_styles.get("wizards", "")}><i class="fas fa-magic"></i> Wizards</a></li>
+        </ul>
+    </nav>
+    '''
+
+
 # ========== DEEPSEEK API FUNCTION ==========
 # Add this import at the top
 import httpx
