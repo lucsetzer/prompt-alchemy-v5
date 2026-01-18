@@ -99,7 +99,7 @@ async def test_page():
 
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
-    """Dark theme layout for wizard steps - FIXED SYNTAX"""
+    """Dark theme layout - FIXED all issues"""
     
     progress_percent = (step / 6) * 100 if step <= 6 else 100
     
@@ -117,21 +117,42 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             color: #e2e8f0;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
         }}
         
-        /* Navigation */
-        nav.container {{
-            background: #1e293b !important;
-            border-bottom: 1px solid #334155 !important;
+        /* FULL-WIDTH NAV */
+        .app-nav {{
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
             padding: 1rem 0;
+            width: 100%;
         }}
         
-        nav a {{
-            color: #cbd5e1 !important;
+        .nav-inner {{
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
         }}
         
-        nav a:hover {{
-            color: #0cc0df !important;
+        .app-nav a {{
+            color: #cbd5e1;
+            text-decoration: none;
+        }}
+        
+        .app-nav a:hover {{
+            color: #0cc0df;
+        }}
+        
+        /* MAIN CONTENT - Full width but constrained */
+        .app-main {{
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem 1rem;
+            min-height: 70vh;
         }}
         
         /* Progress bar */
@@ -140,6 +161,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             background: #334155;
             border-radius: 4px;
             overflow: hidden;
+            margin: 2rem 0;
         }}
         
         .progress-fill {{
@@ -171,7 +193,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         .step-grid {{
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 1.5rem;
             margin: 2rem 0;
         }}
         
@@ -203,23 +225,25 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         .step-card h3 {{
             color: #f1f5f9;
             margin: 0;
+            font-size: 1.25rem;
         }}
         
         .step-card p {{
             color: #cbd5e1;
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
         }}
         
-        /* Output box */
+        /* OUTPUT - WHITE BACKGROUND (professional) */
         .clean-output {{
             background: white !important;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             padding: 2rem;
-            margin: 1.5rem 0;
+            margin: 1.5rem 0 3rem 0;  /* Extra bottom margin */
             line-height: 1.6;
-            color: #1f2937 !important;  /* Dark text for contrast */
+            color: #1f2937 !important;
             font-family: 'Segoe UI', 'SF Pro Text', -apple-system, sans-serif;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }}
@@ -233,20 +257,14 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         .clean-output p {{
             color: #374151 !important;
         }}
-
-        /* Fix button overlap */
-        main.container {{
-            padding-bottom: 4rem !important;  /* Space at bottom */
-            min-height: 70vh;  /* Ensure content pushes footer down */
-        }}
-
-/* Make buttons stay on top */
-button, a[role="button"] {{
-    position: relative;
-    z-index: 10;
-}}
-
         
+        /* Buttons stay on top */
+        button, a[role="button"] {{
+            position: relative;
+            z-index: 10;
+        }}
+        
+        /* Cards */
         article, .card {{
             background: #1e293b;
             border: 1px solid #334155;
@@ -257,30 +275,29 @@ button, a[role="button"] {{
     </style>
 </head>
 <body>
-    <nav style="background: #1e293b; border-bottom: 1px solid #334155; padding: 1rem 0; width: 100%;">
-    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-        <ul style="margin: 0; padding: 0;">
-            <li style="display: inline;">
-                <strong>
-                    <a href="/" style="color: #0cc0df; text-decoration: none;">
-                        <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
-                    </a>
-                </strong>
-            </li>
-        </ul>
-        <ul style="margin: 0; padding: 0; display: flex; gap: 1.5rem;">
-            <li style="display: inline;"><a href="/" style="color: #cbd5e1;"><i class="fas fa-home"></i> Home</a></li>
-            <li style="display: inline;"><a href="/dashboard" style="color: #cbd5e1;"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li style="display: inline;"><a href="/prompt-wizard" style="color: #cbd5e1;"><i class="fas fa-magic"></i> Wizards</a></li>
-        </ul>
-    </div>
-</nav>
+    <!-- FULL WIDTH NAV -->
+    <nav class="app-nav">
+        <div class="nav-inner">
+            <div>
+                <a href="/" style="color: #0cc0df; font-size: 1.2rem;">
+                    <i class="fa-solid fa-hat-wizard"></i> <strong>Prompts Alchemy</strong>
+                </a>
+            </div>
+            <div>
+                <a href="/" style="margin-right: 1.5rem;"><i class="fas fa-home"></i> Home</a>
+                <a href="/dashboard" style="margin-right: 1.5rem;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a>
+            </div>
+        </div>
+    </nav>
     
-    <main class="container">
+    <!-- MAIN CONTENT -->
+    <main class="app-main">
         {content}
     </main>
     
-    <footer style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #64748b; border-top: 1px solid #334155;">
+    <!-- FOOTER -->
+    <footer style="text-align: center; padding: 2rem; color: #64748b; border-top: 1px solid #334155; background: #1e293b;">
         <p>© 2024 Prompts Alchemy</p>
     </footer>
     
