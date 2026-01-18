@@ -151,7 +151,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #333333;
+            color: #999999;
             display: flex;
             flex-direction: column;
             align-items: center;
