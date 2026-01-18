@@ -1226,7 +1226,7 @@ async def prompt_wizard_landing(request: Request):
         </div>
     </div>
     
-    # In your landing page route, find this JavaScript section:
+    
 <script>
     // Submit auth form
     async function submitAuth(event) {{
