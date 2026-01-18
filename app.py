@@ -1135,7 +1135,70 @@ async def debug_api():
         "all_env_vars": dict(os.environ)  # Shows all environment variables
     }
 
-
+@app.get("/debug/network")
+async def debug_network():
+    """Debug network connectivity from Render"""
+    import socket
+    import time
+    import requests
+    from datetime import datetime
+    
+    results = {
+        "timestamp": datetime.now().isoformat(),
+        "tests": {}
+    }
+    
+    # Test 1: DNS resolution
+    start = time.time()
+    try:
+        ip = socket.gethostbyname('api.deepseek.com')
+        elapsed = time.time() - start
+        results["tests"]["dns"] = {
+            "status": "✅",
+            "time": f"{elapsed:.2f}s",
+            "ip": ip
+        }
+    except Exception as e:
+        results["tests"]["dns"] = {
+            "status": "❌",
+            "error": str(e)
+        }
+    
+    # Test 2: Simple HTTP request
+    start = time.time()
+    try:
+        resp = requests.get('https://httpbin.org/status/200', timeout=5)
+        elapsed = time.time() - start
+        results["tests"]["httpbin"] = {
+            "status": "✅",
+            "time": f"{elapsed:.2f}s",
+            "status_code": resp.status_code
+        }
+    except Exception as e:
+        results["tests"]["httpbin"] = {
+            "status": "❌",
+            "error": str(e)
+        }
+    
+    # Test 3: DeepSeek API endpoint check (no key)
+    start = time.time()
+    try:
+        resp = requests.get('https://api.deepseek.com/', timeout=5)
+        elapsed = time.time() - start
+        results["tests"]["deepseek_root"] = {
+            "status": "✅",
+            "time": f"{elapsed:.2f}s",
+            "status_code": resp.status_code
+        }
+    except Exception as e:
+        results["tests"]["deepseek_root"] = {
+            "status": "❌",
+            "error": str(e)
+        }
+    
+    # Return as JSON
+    from fastapi.responses import JSONResponse
+    return JSONResponse(content=results)
 
 # ========== RUN THE APP ==========
 if __name__ == "__main__":
