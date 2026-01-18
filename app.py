@@ -113,7 +113,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         /* BODY - PROPERLY ESCAPED */
         body {{
             background: #ffffff;
-            color: #222222;
+            color: #333333;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }}
@@ -142,7 +142,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             justify-content: space-between;
             margin-top: 0.5rem;
             font-size: 0.85rem;
-            color: #666666;
+            color: #444444;
         }}
         
         .progress-step {{
@@ -182,7 +182,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: inherit;
+            color: #444444;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -251,7 +251,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <ul>
             <li>
                 <strong>
-                    <a href="/" style="color: #0a8ea8; text-decoration: none;">
+                    <a href="/" style="color: #0cc0df; text-decoration: none;">
                         <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
                     </a>
                 </strong>
