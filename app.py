@@ -893,6 +893,15 @@ async def generate_prompt(
     tone: str = Query("professional"),
     prompt: str = Query("")
 ):
+    # Try async first, fallback to sync
+    try:
+        optimized_prompt = await call_deepseek_api_async(goal, audience, tone, platform, prompt)
+    except:
+        optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
+    
+    # Convert to HTML
+    formatted_html = markdown_to_clean_html(optimized_prompt)
+    
     # Add debug logging
     import logging
     logging.basicConfig(level=logging.INFO)
