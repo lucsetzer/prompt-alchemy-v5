@@ -915,50 +915,44 @@ async def generate_prompt(
     tone: str = Query("professional"),
     prompt: str = Query("")
 ):
-    # Try async first, fallback to sync
+    """Generate optimized prompt with improved error handling"""
+    
+    import logging
+    import time
+    
+    # Set up logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    logger.info(f"Generating prompt for: {goal}, {audience}, {platform}")
+    
+    # Start timing
+    start_time = time.time()
+    
+    # Try the optimized async call
     try:
-        optimized_prompt = await call_deepseek_api_async(goal, audience, tone, platform, prompt)
-    except:
-        optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
+        optimized_prompt = await call_deepseek_api_optimized(goal, audience, tone, platform, prompt)
+        
+        elapsed = time.time() - start_time
+        logger.info(f"Prompt generated in {elapsed:.2f} seconds")
+        
+        # Log if we used fallback
+        if "Role & Context" in optimized_prompt and "Target Audience" in optimized_prompt:
+            logger.warning("Used fallback prompt (API may have failed)")
+        
+    except Exception as e:
+        logger.error(f"Error generating prompt: {str(e)}")
+        elapsed = time.time() - start_time
+        optimized_prompt = get_fallback_prompt(goal, audience, tone, platform, prompt)
+        optimized_prompt = f"## ⚠️ Note: Using fallback template\n\n{optimized_prompt}"
     
     # Convert to HTML
     formatted_html = markdown_to_clean_html(optimized_prompt)
     
-    # Add debug logging
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    
-    # Log the request
-    logging.info(f"Generating prompt: {prompt[:50]}...")
-    
-    # Check API key
-    api_key = os.getenv("DEEPSEEK_API_KEY", "")
-    logging.info(f"API key exists: {bool(api_key)}")
-    if api_key:
-        logging.info(f"API key preview: ...{api_key[-4:]}")
-    
-    # Call API
-    try:
-        optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
-        logging.info(f"API response length: {len(optimized_prompt)}")
-        
-        # Check if it's an error message
-        if "Error" in optimized_prompt or "unavailable" in optimized_prompt.lower():
-            logging.error(f"API returned error: {optimized_prompt[:100]}")
-            
-    except Exception as e:
-        logging.error(f"Exception in generate_prompt: {e}")
-        optimized_prompt = f"## System Error\n\n{str(e)}"
-    
-    # Rest of your function...
-    
-    # Generate the prompt
-    optimized_prompt = call_deepseek_api(goal, audience, tone, platform, prompt)
-    
-    # Convert to beautiful HTML
-    formatted_html = markdown_to_clean_html(optimized_prompt)
-    
-    # ... rest of your HTML template ...
+    # Add performance info (for debugging)
+    debug_info = ""
+    if elapsed > 10:
+        debug_info = f'<p style="color: #999; font-size: 0.8rem; text-align: center;">(Generation took {elapsed:.1f}s)</p>'
     
     content = f'''
     <article>
@@ -966,6 +960,7 @@ async def generate_prompt(
             <hgroup>
                 <h1><i class="fas fa-check-circle"></i> Prompt Ready!</h1>
                 <p>Your AI-optimized prompt for {platform.capitalize()}</p>
+                {debug_info}
             </hgroup>
         </header>
         
@@ -982,21 +977,29 @@ async def generate_prompt(
                 {formatted_html}
             </div>
             
-            <div style="text-align: center; margin-top: 1rem;">
-                <button onclick="copyPrompt()" class="primary">
-                    <i class="fas fa-copy"></i> Copy Prompt
+            <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="copyPrompt()" class="primary" style="padding: 0.75rem 1.5rem;">
+                    <i class="fas fa-copy"></i> Copy Prompt to Clipboard
                 </button>
+                
+                <a href="/prompt-wizard/step/6?goal={goal}&audience={audience}&platform={platform}&style={style}&tone={tone}" 
+                   class="secondary" style="margin-left: 1rem; padding: 0.75rem 1.5rem;">
+                    <i class="fas fa-edit"></i> Try Another Prompt
+                </a>
+                
+                <a href="/" class="secondary" style="margin-left: 1rem; padding: 0.75rem 1.5rem;">
+                    <i class="fas fa-home"></i> Start Over
+                </a>
             </div>
-            
-            <!-- ... rest of your content ... -->
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem; color: #666; font-size: 0.9rem;">
+            <p><i class="fas fa-lightbulb"></i> Tip: Paste this prompt directly into {platform.capitalize()} for best results</p>
         </div>
     </article>
     '''
     
     return layout("Generated Prompt", content, step=7)
-
-// Add to your step 6 form:
-<form id="generate-form" onsubmit="showLoading()">
 
 
 import re
@@ -1213,6 +1216,17 @@ async def debug_network():
     # Return as JSON
     from fastapi.responses import JSONResponse
     return JSONResponse(content=results)
+
+@app.get("/test/simple")
+async def test_simple():
+    """Simple test that doesn't call external API"""
+    return {
+        "status": "ok",
+        "message": "App is running",
+        "timestamp": time.time(),
+        "render_service": os.getenv("RENDER_SERVICE_ID", "local")
+    }
+
 
 # ========== RUN THE APP ==========
 if __name__ == "__main__":
