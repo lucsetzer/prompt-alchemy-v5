@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Prompts Alchemy{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0cc0df;
+            --primary-hover: #00d9ff;
+        }
+        
+        /* DARK THEME OVERRIDES */
+        body {
+            background: #0f172a !important;
+            color: #e2e8f0 !important;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Navigation */
+        .app-nav {
+            background: #1e293b !important;
+            border-bottom: 1px solid #334155 !important;
+            padding: 1rem 0;
+        }
+        
+        .app-nav a {
+            color: #cbd5e1 !important;
+        }
+        
+        .app-nav a:hover {
+            color: var(--primary) !important;
+        }
+        
+        /* Cards in dark theme */
+        .dark-card {
+            background: #1e293b !important;
+            border: 1px solid #334155 !important;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        /* Container */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: white !important;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-hover) !important;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- SHARED NAVIGATION -->
+    <nav class="app-nav">
+        <div class="app-container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <a href="/" style="color: var(--primary) !important; text-decoration: none; font-size: 1.2rem;">
+                    <i class="fa-solid fa-hat-wizard"></i> <strong>Prompts Alchemy</strong>
+                </a>
+            </div>
+            <div>
+                <ul style="display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; align-items: center;">
+                    <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a></li>
+                    <li><a href="/" style="color: #94a3b8;"><i class="fas fa-external-link-alt"></i> Homepage</a></li>
+                    {% if user_logged_in %}
+                    <li><span style="color: var(--primary);"><i class="fas fa-coins"></i> {{ user_tokens }} tokens</span></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- MAIN CONTENT -->
+    <main class="app-container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        {% block content %}
+        <!-- Page content goes here -->
+        {% endblock %}
+    </main>
+    
+    <!-- FOOTER (optional for app pages) -->
+    <footer style="text-align: center; padding: 2rem; color: #64748b; border-top: 1px solid #334155;">
+        <p>© 2024 Prompts Alchemy • <a href="/terms" style="color: #94a3b8;">Terms</a> • <a href="/privacy" style="color: #94a3b8;">Privacy</a></p>
+    </footer>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
