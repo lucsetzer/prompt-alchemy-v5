@@ -467,7 +467,7 @@ async def step1():
             </div>
         </header>
         
-        <div class="step-grid">
+        <div class="grid" style="grid-template-columns: repeat(2, 1fr); gap: 1rem;">
             {goal_cards}
         </div>
         
