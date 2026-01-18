@@ -1268,10 +1268,8 @@ async def prompt_wizard_landing(request: Request):
                     hideAuthModal();
                     alert('Check your email for a login link! For now, we\'ll redirect you to the wizard.');
                     
-                    // TEMPORARY: Redirect directly since we don't have email setup
-                    setTimeout(() => {{
-                        window.location.href = '/prompt-wizard/step/1';
-                    }}, 1500);
+                    const magicLink = `${window.location.origin}/api/auth/login?token=${result.demo_token}`;
+alert(`For demo: Click this link to login:\n\n${magicLink}\n\n(In production, this would be emailed to you.)`);
                     
                     // Store email in localStorage for demo
                     localStorage.setItem('user_email', email);
