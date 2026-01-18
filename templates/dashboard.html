@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Prompts Alchemy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Similar styles to frontpage */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .wizard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="container">
+        <ul>
+            <li><strong><a href="/"><i class="fas fa-hat-wizard"></i> Prompts Alchemy</a></strong></li>
+        </ul>
+        <ul>
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/dashboard" class="secondary"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a></li>
+        </ul>
+    </nav>
+    
+    <main class="dashboard-container">
+        <h1>Your Dashboard</h1>
+        
+        <!-- Sign In Callout -->
+        <div class="stat-card" style="background: linear-gradient(135deg, #0cc0df, #00d9ff); color: white; margin: 2rem 0;">
+            <h2><i class="fas fa-lock"></i> Sign In to Unlock</h2>
+            <p>Connect your account to track tokens, view history, and manage subscriptions.</p>
+            <button onclick="showSignupModal()" style="background: white; color: #0cc0df; padding: 1rem 2rem; border: none; border-radius: 8px; font-weight: 600; margin-top: 1rem;">
+                <i class="fas fa-envelope"></i> Sign In with Email
+            </button>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0;">
+            <div class="stat-card">
+                <h3><i class="fas fa-coins"></i> Tokens</h3>
+                <p style="font-size: 2.5rem; font-weight: bold; color: #0cc0df;">--</p>
+                <p>Sign in to see remaining</p>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-history"></i> Prompts Generated</h3>
+                <p style="font-size: 2.5rem; font-weight: bold; color: #0cc0df;">--</p>
+                <p>This month</p>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-crown"></i> Plan</h3>
+                <p style="font-size: 2.5rem; font-weight: bold; color: #0cc0df;">Free</p>
+                <p>10 tokens/month</p>
+            </div>
+        </div>
+        
+        <!-- Wizards Grid -->
+        <h2>AI Wizards</h2>
+        <div class="wizard-grid">
+            <!-- Prompt Wizard -->
+            <div class="stat-card">
+                <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1rem;">
+                    <i class="fas fa-hat-wizard"></i>
+                </div>
+                <h3>Prompt Wizard</h3>
+                <p style="color: #555; margin: 1rem 0;">Create optimized AI prompts</p>
+                <a href="/prompt-wizard" class="primary" style="display: block; text-align: center; padding: 0.75rem;">
+                    2 tokens • Launch
+                </a>
+            </div>
+            
+            <!-- Other wizards (disabled) -->
+            <div class="stat-card" style="opacity: 0.7;">
+                <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <h3>Hook Wizard</h3>
+                <p style="color: #666; margin: 1rem 0;">Generate 3 engaging hooks</p>
+                <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">
+                    2 tokens • Coming Soon
+                </button>
+            </div>
+            
+            <!-- Add 4 more disabled wizard cards -->
+        </div>
+        
+        <!-- Recent Activity -->
+        <div style="margin-top: 3rem;">
+            <h2>Recent Activity</h2>
+            <div class="stat-card">
+                <p style="color: #666; text-align: center;">Sign in to see your prompt history</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Same modal from frontpage -->
+    <div id="signupModal" class="modal">...</div>
+    
+    <script>
+        // Same modal JavaScript from frontpage
+    </script>
+</body>
+</html>
