@@ -213,14 +213,39 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         
         /* Output box */
         .clean-output {{
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin: 1rem 0;
+            background: white !important;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
             line-height: 1.6;
-            color: #e2e8f0;
+            color: #1f2937 !important;  /* Dark text for contrast */
+            font-family: 'Segoe UI', 'SF Pro Text', -apple-system, sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }}
+        
+        .clean-output h3 {{
+            color: #111827 !important;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+        }}
+        
+        .clean-output p {{
+            color: #374151 !important;
+        }}
+
+        /* Fix button overlap */
+        main.container {{
+            padding-bottom: 4rem !important;  /* Space at bottom */
+            min-height: 70vh;  /* Ensure content pushes footer down */
+        }}
+
+/* Make buttons stay on top */
+button, a[role="button"] {{
+    position: relative;
+    z-index: 10;
+}}
+
         
         article, .card {{
             background: #1e293b;
