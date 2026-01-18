@@ -172,6 +172,51 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             transform: translateY(-4px);
             box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
         }}
+
+        /* STEP GRID - Horizontal layout */
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);  /* 2 columns */
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        /* Progress steps - Horizontal circles */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;  /* Lighter gray for dark theme */
+        }
+        
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .progress-step.active {
+            color: #0cc0df;
+            font-weight: bold;
+        }
+        
+        /* Add circle indicators */
+        .progress-step::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            background: #334155;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem auto;
+        }
+        
+        .progress-step.active::before {
+            background: #0cc0df;
+            box-shadow: 0 0 0 3px rgba(12, 192, 223, 0.2);
+        }
+
         
         /* Output box */
         .clean-output {{
