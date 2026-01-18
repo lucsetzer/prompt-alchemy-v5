@@ -406,8 +406,8 @@ async def call_deepseek_api_async(goal: str, audience: str, tone: str, platform:
 @app.get("/")
 async def home():
     content = '''
-    <!-- HERO SECTION - Full width, proper brand color -->
-    <section style="text-align: center; padding: 6rem 2rem; background: dark-turquoise; color: white; width: 100%;">
+    <!-- HERO SECTION -->
+    <section style="text-align: center; padding: 6rem 2rem; background: #0cc0df; color: white; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; font-weight: 700;">Professional AI Tools for Content Creators</h1>
             <p style="font-size: 1.5rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
@@ -424,7 +424,7 @@ async def home():
         </div>
     </section>
 
-    <!-- VALUE PROPS - Full width container -->
+    <!-- VALUE PROPS -->
     <section style="padding: 6rem 2rem; background: #f8fafc; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">Why Prompts Alchemy?</h2>
@@ -454,7 +454,7 @@ async def home():
         </div>
     </section>
 
-    <!-- WIZARDS GRID - Clean, uniform cards -->
+    <!-- WIZARDS GRID -->
     <section style="padding: 6rem 2rem; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">AI Wizard Suite</h2>
@@ -462,7 +462,7 @@ async def home():
                 <!-- Prompt -->
                 <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
                     <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1rem;">
-                        <i class="fa-solid fa-wand"></i>
+                        <i class="fas fa-hat-wizard"></i>
                     </div>
                     <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Prompt</h3>
                     <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create optimized AI prompts</p>
@@ -505,7 +505,7 @@ async def home():
                         <i class="fas fa-scroll"></i>
                     </div>
                     <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Script</h3>
-                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create video and presentation scripts</p>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create video scripts</p>
                     <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">1 token • Coming Soon</button>
                 </div>
 
@@ -522,7 +522,7 @@ async def home():
         </div>
     </section>
 
-    <!-- PRICING SECTION - Simplified, no promises we can't keep -->
+    <!-- PRICING SECTION - FIXED TEXT SPACING -->
     <section id="pricing" style="padding: 6rem 2rem; background: #f8fafc; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">Simple, Transparent Pricing</h2>
@@ -538,54 +538,54 @@ async def home():
                 </button>
             </div>
             
-            <!-- Monthly Plans - Clean, simple -->
+            <!-- Monthly Plans - FIXED: Smaller text, better padding -->
             <div class="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
                 <!-- Student Plan -->
-                <div class="card" style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 2px solid #0cc0df;">
-                    <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0cc0df; color: white; padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.9rem;">
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 2px solid #0cc0df; position: relative;">
+                    <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0cc0df; color: white; padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.9rem; white-space: nowrap;">
                         Most Popular
                     </div>
-                    <h3 style="color: #333; font-size: 1.75rem; margin-bottom: 1rem;">Student</h3>
-                    <div style="font-size: 3rem; font-weight: bold; margin: 1.5rem 0; color: #333;">
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem; padding-top: 0.5rem;">Student</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
                         $9.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
                     </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 2rem 0; color: #555; list-style: none; padding-left: 0;">
-                        <li style="margin-bottom: 0.75rem;">✓ 50 tokens monthly</li>
-                        <li style="margin-bottom: 0.75rem;">✓ All 6 wizards</li>
-                        <li style="margin-bottom: 0.75rem;">✓ Student ID required</li>
-                        <li style="margin-bottom: 0.75rem;">✓ Email support</li>
+                    <ul style="text-align: center; margin: 1.5rem 0; color: #555; list-style: none; padding: 0; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ 50 tokens monthly</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ All 6 wizards</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Student ID required</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Email support</li>
                     </ul>
-                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 1rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600;">Choose Student</button>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 0.9rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 0.5rem;">Choose Student</button>
                 </div>
 
                 <!-- Creator Plan -->
-                <div class="card" style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="color: #333; font-size: 1.75rem; margin-bottom: 1rem;">Creator</h3>
-                    <div style="font-size: 3rem; font-weight: bold; margin: 1.5rem 0; color: #333;">
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">Creator</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
                         $19.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
                     </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 2rem 0; color: #555; list-style: none; padding-left: 0;">
-                        <li style="margin-bottom: 0.75rem;">✓ 125 tokens monthly</li>
-                        <li style="margin-bottom: 0.75rem;">✓ Priority generation</li>
-                        <li style="margin-bottom: 0.75rem;">✓ All features</li>
-                        <li style="margin-bottom: 0.75rem;">✓ Email support</li>
+                    <ul style="text-align: center; margin: 1.5rem 0; color: #555; list-style: none; padding: 0; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ 125 tokens monthly</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Priority generation</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ All features</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Email support</li>
                     </ul>
-                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 1rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600;">Choose Creator</button>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 0.9rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 0.5rem;">Choose Creator</button>
                 </div>
 
                 <!-- Agency Plan -->
-                <div class="card" style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="color: #333; font-size: 1.75rem; margin-bottom: 1rem;">Agency</h3>
-                    <div style="font-size: 3rem; font-weight: bold; margin: 1.5rem 0; color: #333;">
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">Agency</h3>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
                         $49.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
                     </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 2rem 0; color: #555; list-style: none; padding-left: 0;">
-                        <li style="margin-bottom: 0.75rem;">✓ 500 shared tokens</li>
-                        <li style="margin-bottom: 0.75rem;">✓ Team management</li>
-                        <li style="margin-bottom: 0.75rem;">✓ All features</li>
-                        <li style="margin-bottom: 0.75rem;">✓ Email support</li>
+                    <ul style="text-align: center; margin: 1.5rem 0; color: #555; list-style: none; padding: 0; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ 500 shared tokens</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Team management</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ All features</li>
+                        <li style="margin-bottom: 0.75rem; padding: 0 0.5rem;">✓ Email support</li>
                     </ul>
-                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 1rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600;">Choose Agency</button>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 0.9rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 0.5rem;">Choose Agency</button>
                 </div>
             </div>
 
@@ -594,22 +594,22 @@ async def home():
                 <h3 style="margin-bottom: 2rem; color: #444; font-size: 1.75rem;">Need More Tokens? Buy Token Packs</h3>
                 <div class="grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
                     <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Mini Boost</h4>
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Mini Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$4.99</div>
                         <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">25 tokens</div>
                     </div>
                     <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Creator Boost</h4>
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Creator Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$14.99</div>
                         <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">100 tokens</div>
                     </div>
                     <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Agency Boost</h4>
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Agency Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$39.99</div>
                         <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">300 tokens</div>
                     </div>
                     <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Mega Boost</h4>
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.1rem;">Mega Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$99.99</div>
                         <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">1000 tokens</div>
                     </div>
@@ -618,7 +618,7 @@ async def home():
         </div>
     </section>
 
-    <!-- FOOTER - Clean, without email icon -->
+    <!-- FOOTER - FIXED: Social icons centered with spacing -->
     <footer style="background: #1f2937; color: white; padding: 4rem 2rem; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <div class="grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem;">
@@ -652,14 +652,14 @@ async def home():
                     </ul>
                 </div>
 
-                <!-- Social - No email icon -->
+                <!-- Social - FIXED: Centered, better spacing -->
                 <div>
-                    <h4 style="color: #f9fafb; margin-bottom: 1rem;">Connect</h4>
-                    <div style="display: flex; gap: 1.5rem; font-size: 1.5rem;">
-                        <a href="https://reddit.com" style="color: #d1d5db;"><i class="fab fa-reddit"></i></a>
-                        <a href="https://youtube.com" style="color: #d1d5db;"><i class="fab fa-youtube"></i></a>
-                        <a href="https://linkedin.com" style="color: #d1d5db;"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://discord.com" style="color: #d1d5db;"><i class="fab fa-discord"></i></a>
+                    <h4 style="color: #f9fafb; margin-bottom: 1.5rem;">Connect</h4>
+                    <div style="display: flex; justify-content: flex-start; gap: 1.2rem; font-size: 1.5rem; flex-wrap: wrap;">
+                        <a href="https://reddit.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#ff5700'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-reddit"></i></a>
+                        <a href="https://youtube.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-youtube"></i></a>
+                        <a href="https://linkedin.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#0077b5'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://discord.com" style="color: #d1d5db; transition: color 0.2s;" onmouseover="this.style.color='#5865f2'" onmouseout="this.style.color='#d1d5db'"><i class="fab fa-discord"></i></a>
                     </div>
                     <p style="margin-top: 2rem; font-size: 0.9rem; color: #9ca3af;">
                         © 2024 Prompts Alchemy. All rights reserved.
@@ -669,7 +669,7 @@ async def home():
         </div>
     </footer>
 
-    <!-- SIGNUP MODAL (Keep the same) -->
+    <!-- SIGNUP MODAL -->
     <div id="signupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
         <div style="background: white; padding: 2.5rem; border-radius: 12px; max-width: 400px; width: 90%;">
             <h2 style="color: #333; margin-bottom: 1rem; font-size: 1.75rem;">Join Prompts Alchemy</h2>
@@ -680,15 +680,50 @@ async def home():
         </div>
     </div>
 
-    <!-- Keep the same JavaScript -->
     <script>
-        // ... (same JavaScript as before)
+        // Modal functions
+        function showSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+        
+        function hideSignupModal() {
+            document.getElementById('signupModal').style.display = 'none';
+        }
+        
+        function submitSignup() {
+            const email = document.getElementById('signupEmail').value;
+            if (email && email.includes('@')) {
+                alert('Thank you! Signup launching soon. We\'ll notify you at ' + email);
+                hideSignupModal();
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('signupModal').addEventListener('click', function(e) {
+            if (e.target.id === 'signupModal') {
+                hideSignupModal();
+            }
+        });
+        
+        // Smooth scroll for pricing anchor
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#pricing') {
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
     '''
     
     return layout("Prompts Alchemy - Professional AI Tools", content, step=0)
-    return layout("Prompt Alchemy - Professional AI Tools", content, step=0)
-
+    
 # ========== STEP 1: GOAL SELECTION ==========
 @app.get("/prompt-wizard/step/1")
 async def step1():
