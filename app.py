@@ -99,6 +99,49 @@ async def test_page():
     </html>
     """)
 
+from fastapi import Cookie, HTTPException
+
+def get_current_user(session_token: str = Cookie(None)):
+    """Get current user from session token"""
+    if not session_token:
+        return None
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute(
+            """SELECT email, expires_at 
+               FROM user_sessions 
+               WHERE session_token = ? AND expires_at > ?""",
+            (session_token, datetime.datetime.now())
+        )
+        session = cursor.fetchone()
+        
+        if not session:
+            return None
+        
+        email, expires_at = session
+        
+        # Get user data
+        cursor.execute(
+            "SELECT email, tokens FROM users WHERE email = ?",
+            (email,)
+        )
+        user = cursor.fetchone()
+        
+        if user:
+            return {
+                "email": user[0],
+                "tokens": user[1],
+                "session_token": session_token
+            }
+        return None
+        
+    finally:
+        conn.close()
+
+
 
 def init_db():
     """Initialize SQLite database for users"""
@@ -767,15 +810,141 @@ async def home(request: Request):  # <-- Add 'request' parameter
     )
 
 @app.get("/dashboard")
-async def dashboard(request: Request):
-    return templates.TemplateResponse(
-        "dashboard.html", 
-        {
-            "request": request,
-            "user_logged_in": False,  # Will be True when auth is ready
-            "user_tokens": 0
-        }
-    )
+async def dashboard(request: Request, session_token: str = Cookie(None)):
+    """Dashboard with user data"""
+    
+    user = get_current_user(session_token)
+    
+    if user:
+        # User is logged in
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dashboard - Prompts Alchemy</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <style>
+                /* Your dark theme CSS */
+                body {{ background: #0f172a; color: #e2e8f0; }}
+                .card {{ background: #1e293b; border: 1px solid #334155; }}
+            </style>
+        </head>
+        <body>
+            <!-- Navigation with user info -->
+            <nav class="app-nav">
+                <div class="nav-inner">
+                    <div>
+                        <a href="/" style="color: #0cc0df;">
+                            <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
+                        </a>
+                    </div>
+                    <div>
+                        <span style="color: #0cc0df; margin-right: 1.5rem;">
+                            <i class="fas fa-user"></i> {user['email']}
+                        </span>
+                        <span style="color: #fbbf24; margin-right: 1.5rem;">
+                            <i class="fas fa-coins"></i> {user['tokens']} tokens
+                        </span>
+                        <a href="/" style="margin-right: 1.5rem;">Home</a>
+                        <a href="/dashboard">Dashboard</a>
+                    </div>
+                </div>
+            </nav>
+            
+            <main class="app-main">
+                <h1>Your Dashboard</h1>
+                
+                <!-- Real user stats -->
+                <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0;">
+                    <div class="card" style="text-align: center;">
+                        <h3><i class="fas fa-coins"></i> Tokens</h3>
+                        <p style="font-size: 2.5rem; font-weight: bold; color: #0cc0df;">{user['tokens']}</p>
+                        <p style="color: #94a3b8;">Remaining this month</p>
+                    </div>
+                    
+                    <div class="card" style="text-align: center;">
+                        <h3><i class="fas fa-user"></i> Account</h3>
+                        <p style="color: #cbd5e1; margin: 1rem 0;">{user['email']}</p>
+                        <button onclick="logout()" style="background: #ef4444; color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                    
+                    <div class="card" style="text-align: center;">
+                        <h3><i class="fas fa-crown"></i> Plan</h3>
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #f1f5f9;">Free Tier</p>
+                        <p style="color: #94a3b8;">10 tokens/month</p>
+                        <a href="#pricing" style="color: #0cc0df;">Upgrade</a>
+                    </div>
+                </div>
+                
+                <!-- Rest of dashboard... -->
+            </main>
+            
+            <script>
+                function logout() {{
+                    document.cookie = "session_token=; path=/; max-age=0;";
+                    window.location.href = "/";
+                }}
+            </script>
+        </body>
+        </html>
+        """
+    else:
+        # User not logged in - show public dashboard
+        html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dashboard - Prompts Alchemy</title>
+            <!-- Same CSS as before -->
+        </head>
+        <body>
+            <!-- Public dashboard HTML (what you already have) -->
+        </body>
+        </html>
+        """
+    
+    return HTMLResponse(content=html)
+
+
+@app.get("/logout")
+async def logout():
+    """Log out user by clearing session cookie"""
+    response = HTMLResponse("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Logged Out - Prompts Alchemy</title>
+            <style>
+                body { background: #0f172a; color: white; font-family: sans-serif; padding: 3rem; text-align: center; }
+                .card { background: #1e293b; padding: 2rem; border-radius: 12px; max-width: 500px; margin: 2rem auto; }
+            </style>
+            <script>
+                // Clear session cookie
+                document.cookie = "session_token=; path=/; max-age=0;";
+                
+                // Redirect after 1 second
+                setTimeout(function() {
+                    window.location.href = "/";
+                }, 1000);
+            </script>
+        </head>
+        <body>
+            <div class="card">
+                <h1>✅ Logged Out</h1>
+                <p>You have been successfully logged out.</p>
+                <p>Redirecting to homepage...</p>
+                <p><a href="/" style="color: #0cc0df;">Click here if not redirected</a></p>
+            </div>
+        </body>
+        </html>
+    """)
+    
+    # Clear cookie server-side too
+    response.delete_cookie("session_token")
+    return response
 
 
 @app.get("/prompt-wizard")
