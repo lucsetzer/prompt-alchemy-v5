@@ -419,7 +419,14 @@ async def home(request: Request):  # <-- Add 'request' parameter
 
 @app.get("/dashboard")
 async def dashboard(request: Request):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+    return templates.TemplateResponse(
+        "dashboard.html", 
+        {
+            "request": request,
+            "user_logged_in": False,  # Will be True when auth is ready
+            "user_tokens": 0
+        }
+    )
 
 
 # ========== STEP 1: GOAL SELECTION ==========
