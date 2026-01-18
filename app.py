@@ -416,7 +416,12 @@ async def home(request: Request):  # <-- Add 'request' parameter
         "frontpage.html", 
         {"request": request}  # <-- Required by FastAPI templates
     )
-    
+
+@app.get("/dashboard")
+async def dashboard(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
+
+
 # ========== STEP 1: GOAL SELECTION ==========
 @app.get("/prompt-wizard/step/1")
 async def step1():
