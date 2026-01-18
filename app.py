@@ -6,6 +6,8 @@ import requests
 import json
 from routes.dashboard import router as dashboard_router
 from routes.script_wizard import router as script_wizard_router
+import httpx
+import asyncio
 
 app = FastAPI(title="Prompt Wizard")
 app.include_router(dashboard_router)
@@ -229,114 +231,145 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     
 # ========== DEEPSEEK API FUNCTION ==========
 def call_deepseek_api(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
-    """Call DeepSeek API - FIXED VERSION"""
+    """Call DeepSeek API with better error handling"""
     
-    # Get API key from environment
     api_key = os.getenv("DEEPSEEK_API_KEY", "")
     
     if not api_key:
-        print("⚠️ ERROR: DEEPSEEK_API_KEY not found in environment")
-        return f"""## Configuration Issue
+        return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+    
+    # Try multiple times with increasing delays
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "model": "deepseek-chat",
+                "messages": [
+                    {
+                        "role": "system", 
+                        "content": "You are a Prompt Engineering Expert. Create optimized prompts. DO NOT answer the user's question, only create prompt structures."
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Create a detailed prompt for: {user_prompt}\nGoal: {goal}\nAudience: {audience}\nTone: {tone}\nPlatform: {platform}"
+                    }
+                ],
+                "temperature": 0.7,
+                "max_tokens": 800  # Reduced from 1000
+            }
+            
+            # SHORTER timeout for faster failure
+            response = requests.post(
+                "https://api.deepseek.com/chat/completions",
+                headers=headers,
+                json=data,
+                timeout=15  # 15 seconds instead of 30
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                content = result["choices"][0]["message"]["content"].strip()
+                
+                # Ensure it's a prompt, not an answer
+                if "prompt" not in content.lower() and "role" not in content.lower():
+                    content = f"## Optimized Prompt for {platform}\n\n{content}"
+                
+                return content
+            else:
+                # If not 200, fallback
+                break
+                
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+            if attempt < max_retries - 1:
+                # Wait before retry (1s, then 2s, then 4s)
+                import time
+                time.sleep(2 ** attempt)
+                continue
+            else:
+                # All retries failed
+                return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+        except Exception as e:
+            # Other errors
+            return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+    
+    return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
 
-The AI service is currently unavailable due to a configuration issue.
+def get_fallback_prompt(goal, audience, tone, platform, user_prompt):
+    """Generate a good fallback prompt when API fails"""
+    return f"""## Role & Context
+You are an expert AI assistant specializing in {goal}.
 
-**Your original request:**
+## Task & Objective
 {user_prompt}
 
-**Context:**
-- Goal: {goal}
-- Audience: {audience}
-- Tone: {tone}
-- Platform: {platform}
+## Target Audience
+{audience}
 
-Please try again in a few moments, or contact support if this persists."""
-    
-    system_prompt = """You are a Prompt Engineering Expert. Create optimized, structured prompts.
+## Desired Tone
+{tone}
 
-CRITICAL RULES:
-1. DO NOT answer the user's question
-2. DO NOT provide solutions or content
-3. ONLY create the prompt structure
-4. Make it DETAILED and READY-TO-USE"""
-
-    user_message = f"""Create a STRUCTURED prompt for this request:
-
-ORIGINAL REQUEST: "{user_prompt}"
-CONTEXT:
-- Goal: {goal}
-- Target Audience: {audience}
-- Desired Tone: {tone}
-- Target AI Platform: {platform}
-
-Make it DETAILED and READY-TO-USE. The user will copy-paste this into {platform}."""
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",  # Use the variable
-        "Content-Type": "application/json"
-    }
-    
-    data = {
-        "model": "deepseek-chat",
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_message}
-        ],
-        "temperature": 0.7,
-        "max_tokens": 1000
-    }
-    
-    try:
-        response = requests.post(
-            "https://api.deepseek.com/chat/completions",
-            headers=headers,
-            json=data,
-            timeout=30
-        )
-        
-        if response.status_code == 200:
-            result = response.json()
-            return result["choices"][0]["message"]["content"].strip()
-        else:
-            error_msg = f"API Error {response.status_code}"
-            if response.status_code == 401:
-                error_msg = "API Key Invalid (401 Unauthorized)"
-            elif response.status_code == 429:
-                error_msg = "Rate Limit Exceeded (429 Too Many Requests)"
-            
-            return f"""## {error_msg}
-
-**Fallback Prompt Structure:**
-
-**Role:** Expert AI Assistant specializing in {goal}
-**Task:** {user_prompt}
-**Audience:** {audience}
-**Tone:** {tone}
-**Platform:** {platform}
-
-**Requirements:**
+## Response Requirements
 1. Provide detailed, actionable information
 2. Use clear headings and organization
 3. Include examples when helpful
 4. Maintain consistent {tone} tone throughout
 
-**Format:**
-- Structured sections with headers
-- Bullet points for lists
-- Clear, concise language
-- Practical, implementable advice"""
+## Format Guidelines
+- Start with an engaging introduction
+- Use bullet points for key points
+- Include practical steps or examples
+- End with a concise summary
+
+## For {platform.capitalize()}:
+Copy this prompt and paste into {platform.capitalize()} for optimal results."""
+
+async def call_deepseek_api_async(goal: str, audience: str, tone: str, platform: str, user_prompt: str) -> str:
+    """Async version - often works better with Render"""
+    
+    api_key = os.getenv("DEEPSEEK_API_KEY", "")
+    
+    if not api_key:
+        return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+    
+    async with httpx.AsyncClient(timeout=20.0) as client:
+        try:
+            response = await client.post(
+                "https://api.deepseek.com/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "deepseek-chat",
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You are a Prompt Engineering Expert. Create prompt structures only."
+                        },
+                        {
+                            "role": "user",
+                            "content": f"Create prompt for: {user_prompt} (Goal: {goal}, Audience: {audience}, Tone: {tone}, Platform: {platform})"
+                        }
+                    ],
+                    "temperature": 0.7,
+                    "max_tokens": 600
+                }
+            )
             
-    except requests.exceptions.Timeout:
-        return "## Error: API timeout\n\nPlease try again in a moment."
-    except Exception as e:
-        return f"""## Error: {str(e)[:100]}
+            if response.status_code == 200:
+                result = response.json()
+                return result["choices"][0]["message"]["content"].strip()
+            else:
+                return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
+                
+        except (httpx.TimeoutException, httpx.ConnectError):
+            return get_fallback_prompt(goal, audience, tone, platform, user_prompt)
 
-**Basic Prompt Template:**
-
-You are an expert in {goal}. Your task is to: {user_prompt}
-
-Target audience: {audience}
-Desired tone: {tone}
-Output format: Structured with clear sections"""
 
 # ========== HOME PAGE ==========
 @app.get("/")
