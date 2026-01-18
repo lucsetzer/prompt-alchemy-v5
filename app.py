@@ -154,6 +154,23 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             color: #0cc0df;
             font-weight: bold;
         }}
+
+        /* Fix button overlap */
+        main.container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card {
+            position: relative;
+            z-index: 2;
+        }
+        
+        button, a[role="button"] {
+            position: relative;
+            z-index: 10;
+        }
+
         
         /* STEP CARDS */
         .step-card {{
@@ -1038,10 +1055,7 @@ import re
 
 def markdown_to_clean_html(markdown_text: str) -> str:
     """
-    Convert markdown to clean, minimal HTML
-    - White/light gray text only
-    - No decorative lines or colors
-    - Clean spacing
+    Convert markdown to clean HTML with better contrast
     """
     if not markdown_text:
         return ""
@@ -1059,29 +1073,40 @@ def markdown_to_clean_html(markdown_text: str) -> str:
             i += 1
             continue
         
+        # Header level 1 (#) - Make it stand out
+        if line.startswith('# ') and not line.startswith('##'):
+            title = line[2:].strip()
+            html_parts.append(f'<h2 style="font-weight: 700; font-size: 1.5rem; margin: 2rem 0 1rem 0; color: #222; border-bottom: 2px solid #0cc0df; padding-bottom: 0.5rem;">{title}</h2>')
+        
         # Header level 2 (##)
-        if line.startswith('## '):
+        elif line.startswith('## '):
             title = line[3:].strip()
-            html_parts.append(f'<h3 style="font-weight: 600; font-size: 1.25rem; margin: 1.5rem 0 0.75rem 0; color: #333;">{title}</h3>')
+            html_parts.append(f'<h3 style="font-weight: 600; font-size: 1.3rem; margin: 1.75rem 0 0.75rem 0; color: #333;">{title}</h3>')
         
         # Header level 3 (###)
         elif line.startswith('### '):
             title = line[4:].strip()
-            html_parts.append(f'<h4 style="font-weight: 600; font-size: 1.1rem; margin: 1.25rem 0 0.5rem 0; color: #444;">{title}</h4>')
+            html_parts.append(f'<h4 style="font-weight: 600; font-size: 1.1rem; margin: 1.5rem 0 0.5rem 0; color: #444;">{title}</h4>')
+        
+        # Bold text (make it darker)
+        elif '**' in line:
+            # Process bold text with better contrast
+            processed = line
+            processed = re.sub(r'\*\*(.*?)\*\*', r'<strong style="color: #222;">\1</strong>', processed)
+            html_parts.append(f'<p style="margin-bottom: 1rem; line-height: 1.6; color: #444;">{processed}</p>')
         
         # Unordered list
         elif line.startswith('- ') or line.startswith('* '):
             list_items = []
             while i < len(lines) and (lines[i].startswith('- ') or lines[i].startswith('* ')):
                 item = lines[i][2:].strip()
-                # Process bold
-                item = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item)
-                # Process inline code
-                item = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace;">\1</code>', item)
-                list_items.append(f'<li style="margin-bottom: 0.5rem; color: #555;">{item}</li>')
+                # Process formatting within list items
+                item = re.sub(r'\*\*(.*?)\*\*', r'<strong style="color: #222;">\1</strong>', item)
+                item = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #333;">\1</code>', item)
+                list_items.append(f'<li style="margin-bottom: 0.5rem; color: #444; line-height: 1.5;">{item}</li>')
                 i += 1
             
-            html_parts.append(f'<ul style="margin: 1rem 0; padding-left: 1.5rem; color: #555;">{"".join(list_items)}</ul>')
+            html_parts.append(f'<ul style="margin: 1rem 0 1.5rem 1.5rem; color: #444;">{"".join(list_items)}</ul>')
             continue
         
         # Ordered list
@@ -1090,30 +1115,26 @@ def markdown_to_clean_html(markdown_text: str) -> str:
             counter = 1
             while i < len(lines) and re.match(r'^\d+[\.\)] ', lines[i]):
                 item = re.sub(r'^\d+[\.\)] ', '', lines[i]).strip()
-                item = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item)
-                item = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace;">\1</code>', item)
-                list_items.append(f'<li style="margin-bottom: 0.5rem; color: #555;"><span style="color: #777; margin-right: 0.5rem;">{counter}.</span>{item}</li>')
+                item = re.sub(r'\*\*(.*?)\*\*', r'<strong style="color: #222;">\1</strong>', item)
+                item = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #333;">\1</code>', item)
+                list_items.append(f'<li style="margin-bottom: 0.5rem; color: #444; line-height: 1.5;"><span style="color: #666; margin-right: 0.5rem;">{counter}.</span>{item}</li>')
                 i += 1
                 counter += 1
             
-            html_parts.append(f'<ol style="margin: 1rem 0; padding-left: 1.5rem; color: #555;">{"".join(list_items)}</ol>')
+            html_parts.append(f'<ol style="margin: 1rem 0 1.5rem 1.5rem; color: #444;">{"".join(list_items)}</ol>')
             continue
         
-        # Regular paragraph
+        # Regular paragraph (with better contrast)
         else:
-            # Process inline formatting
             processed_line = line
-            
             # Bold
-            processed_line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', processed_line)
-            
+            processed_line = re.sub(r'\*\*(.*?)\*\*', r'<strong style="color: #222;">\1</strong>', processed_line)
             # Italic
-            processed_line = re.sub(r'\*(.*?)\*', r'<em>\1</em>', processed_line)
-            
+            processed_line = re.sub(r'\*(.*?)\*', r'<em style="color: #444;">\1</em>', processed_line)
             # Inline code
-            processed_line = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace;">\1</code>', processed_line)
+            processed_line = re.sub(r'`(.*?)`', r'<code style="background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #333;">\1</code>', processed_line)
             
-            html_parts.append(f'<p style="margin-bottom: 1rem; line-height: 1.6; color: #555;">{processed_line}</p>')
+            html_parts.append(f'<p style="margin-bottom: 1rem; line-height: 1.6; color: #444;">{processed_line}</p>')
         
         i += 1
     
