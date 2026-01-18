@@ -252,6 +252,8 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             <li><a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a></li>
         </ul>
     </nav>
+
+    {get_nav_html("wizards")}
     
     <main class="container">
         {content}
