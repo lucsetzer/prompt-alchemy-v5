@@ -3,7 +3,7 @@ print(f"Python version: {sys.version}")
 print(f"Python path: {sys.path}")
 
 
-from fastapi import FastAPI, Request, Query
+from fastapi import FastAPI, Request, Query, Body, Cookie
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import os
