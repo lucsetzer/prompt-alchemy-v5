@@ -406,361 +406,287 @@ async def call_deepseek_api_async(goal: str, audience: str, tone: str, platform:
 @app.get("/")
 async def home():
     content = '''
-    <!-- HERO SECTION -->
-    <section style="text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, #0cc0df 0%, #00d9ff 100%); color: white;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">Professional AI Tools for Content Creators</h1>
-        <p style="font-size: 1.5rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-            Transform ideas into scripts, hooks, documents, and accessible content
-        </p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <button onclick="showSignupModal()" role="button" class="primary" style="background: white; color: #0cc0df; font-size: 1.2rem; padding: 1rem 2rem;">
-                <i class="fas fa-rocket"></i> Start Creating
-            </button>
-            <a href="#pricing" role="button" style="background: transparent; border: 2px solid white; color: white; font-size: 1.2rem; padding: 1rem 2rem;">
-                <i class="fas fa-tag"></i> View Pricing
-            </a>
+    <!-- HERO SECTION - Full width, proper brand color -->
+    <section style="text-align: center; padding: 6rem 2rem; background: #0cc0df; color: white; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; font-weight: 700;">Professional AI Tools for Content Creators</h1>
+            <p style="font-size: 1.5rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                Transform ideas into scripts, hooks, documents, and accessible content
+            </p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <button onclick="showSignupModal()" role="button" class="primary" style="background: white; color: #0cc0df; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; border: none; font-weight: 600;">
+                    <i class="fas fa-rocket"></i> Start Creating
+                </button>
+                <a href="#pricing" role="button" style="background: transparent; border: 2px solid white; color: white; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                    <i class="fas fa-tag"></i> View Pricing
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- VALUE PROPS -->
-    <section style="padding: 4rem 1rem; background: #f8fafc;">
-        <div class="container" style="max-width: 1200px; margin: 0 auto;">
-            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">Why Prompt Alchemy?</h2>
-            <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem;">
-                <div class="card" style="text-align: center; background: white;">
-                    <div style="font-size: 2.5rem; color: #0cc0df; margin-bottom: 1rem;">
+    <!-- VALUE PROPS - Full width container -->
+    <section style="padding: 6rem 2rem; background: #f8fafc; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">Why Prompts Alchemy?</h2>
+            <div class="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem;">
+                <div class="card" style="text-align: center; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1.5rem;">
                         <i class="fas fa-mouse-pointer"></i>
                     </div>
-                    <h3 style="color: #333;">Click-Based Interface</h3>
-                    <p style="color: #555;">No prompt engineering experience needed. Just choose and click.</p>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">Click-Based Interface</h3>
+                    <p style="color: #555; line-height: 1.6;">No prompt engineering experience needed. Just choose and click.</p>
                 </div>
-                <div class="card" style="text-align: center; background: white;">
-                    <div style="font-size: 2.5rem; color: #0cc0df; margin-bottom: 1rem;">
+                <div class="card" style="text-align: center; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1.5rem;">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <h3 style="color: #333;">60-Second Results</h3>
-                    <p style="color: #555;">Professional-grade outputs in under a minute. No waiting.</p>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">60-Second Results</h3>
+                    <p style="color: #555; line-height: 1.6;">Professional-grade outputs in under a minute. No waiting.</p>
                 </div>
-                <div class="card" style="text-align: center; background: white;">
-                    <div style="font-size: 2.5rem; color: #0cc0df; margin-bottom: 1rem;">
+                <div class="card" style="text-align: center; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1.5rem;">
                         <i class="fas fa-layer-group"></i>
                     </div>
-                    <h3 style="color: #333;">6 Specialized Tools</h3>
-                    <p style="color: #555;">From prompts to scripts to accessibility audits.</p>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 1rem;">6 Specialized Tools</h3>
+                    <p style="color: #555; line-height: 1.6;">From prompts to scripts to accessibility audits.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- WIZARDS GRID -->
-    <section style="padding: 4rem 1rem;">
-        <div class="container" style="max-width: 1200px; margin: 0 auto;">
-            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">AI Wizard Suite</h2>
-            <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem;">
-                <!-- Prompt Wizard -->
-                <div class="card" style="background: white;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="font-size: 2rem; color: #0cc0df;">
-                            <i class="fas fa-hat-wizard"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: #333;">Prompt Wizard</h3>
-                            <small style="color: #10b981;">✅ Live • 2 tokens/use</small>
-                        </div>
+    <!-- WIZARDS GRID - Clean, uniform cards -->
+    <section style="padding: 6rem 2rem; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">AI Wizard Suite</h2>
+            <div class="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <!-- Prompt -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                    <div style="font-size: 3rem; color: #0cc0df; margin-bottom: 1rem;">
+                        <i class="fas fa-hat-wizard"></i>
                     </div>
-                    <p style="color: #555;">Create optimized AI prompts for any platform.</p>
-                    <button onclick="showSignupModal()" class="secondary" style="width: 100%; margin-top: 1rem;">
-                        Try Now
-                    </button>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Prompt</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create optimized AI prompts</p>
+                    <button onclick="showSignupModal()" class="secondary" style="width: 100%; padding: 0.75rem; background: #0cc0df; color: white; border: none; border-radius: 6px; font-weight: 600;">2 tokens • Try Now</button>
                 </div>
 
-                <!-- Hook Wizard -->
-                <div class="card" style="background: white;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="font-size: 2rem; color: #9ca3af;">
-                            <i class="fas fa-fish"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: #333;">Hook Wizard</h3>
-                            <small style="color: #6b7280;">🔜 Coming Soon • 2 tokens/use</small>
-                        </div>
+                <!-- Hook -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-fish"></i>
                     </div>
-                    <p style="color: #555;">Generate 3 engaging hooks for content.</p>
-                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Hook</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Generate 3 engaging hooks</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">2 tokens • Coming Soon</button>
                 </div>
 
-                <!-- Document Wizard -->
-                <div class="card" style="background: white;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="font-size: 2rem; color: #9ca3af;">
-                            <i class="fas fa-file-contract"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: #333;">Document Wizard</h3>
-                            <small style="color: #6b7280;">🔜 Coming Soon • 3 tokens/use</small>
-                        </div>
+                <!-- Document -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-file-contract"></i>
                     </div>
-                    <p style="color: #555;">Analyze legal/medical documents, explain clauses.</p>
-                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Document</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Analyze legal/medical docs</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">3 tokens • Coming Soon</button>
                 </div>
 
-                <!-- Thumbnail Wizard -->
-                <div class="card" style="background: white;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="font-size: 2rem; color: #9ca3af;">
-                            <i class="fas fa-image"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: #333;">Thumbnail Wizard</h3>
-                            <small style="color: #6b7280;">🔜 Coming Soon • 3 tokens/use</small>
-                        </div>
+                <!-- Thumbnail -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-image"></i>
                     </div>
-                    <p style="color: #555;">Score + improve thumbnails for platforms.</p>
-                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Thumbnail</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Score + improve thumbnails</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">3 tokens • Coming Soon</button>
                 </div>
 
-                <!-- Script Wizard -->
-                <div class="card" style="background: white;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="font-size: 2rem; color: #9ca3af;">
-                            <i class="fas fa-scroll"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: #333;">Script Wizard</h3>
-                            <small style="color: #6b7280;">🔜 Coming Soon • 1 token/use</small>
-                        </div>
+                <!-- Script -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-scroll"></i>
                     </div>
-                    <p style="color: #555;">Create video scripts from simple inputs.</p>
-                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Script</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Create video scripts</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">1 token • Coming Soon</button>
                 </div>
 
-                <!-- Accessibility Wizard -->
-                <div class="card" style="background: white;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="font-size: 2rem; color: #9ca3af;">
-                            <i class="fas fa-universal-access"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: #333;">Accessibility Wizard</h3>
-                            <small style="color: #6b7280;">🔜 Coming Soon • 1 token/use</small>
-                        </div>
+                <!-- Accessibility -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                    <div style="font-size: 3rem; color: #9ca3af; margin-bottom: 1rem;">
+                        <i class="fas fa-universal-access"></i>
                     </div>
-                    <p style="color: #555;">Audit + fix accessibility issues.</p>
-                    <button disabled style="width: 100%; margin-top: 1rem; opacity: 0.5; background: #e5e7eb; color: #6b7280;">Coming Soon</button>
+                    <h3 style="color: #333; font-size: 1.5rem; margin-bottom: 0.5rem;">Accessibility</h3>
+                    <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.5;">Audit + fix accessibility</p>
+                    <button disabled style="width: 100%; padding: 0.75rem; background: #e5e7eb; color: #6b7280; border: none; border-radius: 6px;">1 token • Coming Soon</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PRICING SECTION -->
-    <section id="pricing" style="padding: 4rem 1rem; background: #f8fafc;">
-        <div class="container" style="max-width: 1200px; margin: 0 auto;">
-            <h2 style="text-align: center; margin-bottom: 3rem; color: #333;">Simple, Transparent Pricing</h2>
+    <!-- PRICING SECTION - Simplified, no promises we can't keep -->
+    <section id="pricing" style="padding: 6rem 2rem; background: #f8fafc; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #333; font-size: 2.5rem;">Simple, Transparent Pricing</h2>
             
-            <!-- Monthly Plans -->
-            <h3 style="text-align: center; margin-bottom: 2rem; color: #444;">Monthly Plans</h3>
-            <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
-                <!-- Free Plan -->
-                <div class="card" style="text-align: center; background: white;">
-                    <h3 style="color: #333;">Free</h3>
-                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
-                        $0<span style="font-size: 1rem; color: #6b7280;">/month</span>
-                    </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
-                        <li>10 tokens monthly</li>
-                        <li>Prompt Wizard only</li>
-                        <li>Basic templates</li>
-                    </ul>
-                    <button onclick="showSignupModal()" class="secondary" style="width: 100%;">Get Started</button>
-                </div>
-
+            <!-- Get Started Free Callout -->
+            <div style="background: white; padding: 3rem; border-radius: 12px; text-align: center; margin-bottom: 3rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <h3 style="color: #333; font-size: 2rem; margin-bottom: 1rem;">Get Started Free</h3>
+                <p style="color: #555; font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Try Prompt Wizard with <strong>10 free tokens</strong>. No credit card required.
+                </p>
+                <button onclick="showSignupModal()" class="primary" style="background: #0cc0df; color: white; font-size: 1.2rem; padding: 1rem 2.5rem; border: none; border-radius: 8px; font-weight: 600;">
+                    <i class="fas fa-gift"></i> Get 10 Free Tokens
+                </button>
+            </div>
+            
+            <!-- Monthly Plans - Clean, simple -->
+            <div class="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
                 <!-- Student Plan -->
-                <div class="card" style="text-align: center; background: white; border: 2px solid #0cc0df; position: relative;">
-                    <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #0cc0df; color: white; padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.8rem;">
-                        Popular
+                <div class="card" style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 2px solid #0cc0df;">
+                    <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0cc0df; color: white; padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.9rem;">
+                        Most Popular
                     </div>
-                    <h3 style="color: #333;">Student</h3>
-                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                    <h3 style="color: #333; font-size: 1.75rem; margin-bottom: 1rem;">Student</h3>
+                    <div style="font-size: 3rem; font-weight: bold; margin: 1.5rem 0; color: #333;">
                         $9.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
                     </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
-                        <li>50 tokens monthly</li>
-                        <li>All 6 wizards</li>
-                        <li>Student ID required</li>
-                        <li>Email support</li>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 2rem 0; color: #555; list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 0.75rem;">✓ 50 tokens monthly</li>
+                        <li style="margin-bottom: 0.75rem;">✓ All 6 wizards</li>
+                        <li style="margin-bottom: 0.75rem;">✓ Student ID required</li>
+                        <li style="margin-bottom: 0.75rem;">✓ Email support</li>
                     </ul>
-                    <button onclick="showSignupModal()" class="primary" style="width: 100%;">Choose Student</button>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 1rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600;">Choose Student</button>
                 </div>
 
                 <!-- Creator Plan -->
-                <div class="card" style="text-align: center; background: white;">
-                    <h3 style="color: #333;">Creator</h3>
-                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                <div class="card" style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #333; font-size: 1.75rem; margin-bottom: 1rem;">Creator</h3>
+                    <div style="font-size: 3rem; font-weight: bold; margin: 1.5rem 0; color: #333;">
                         $19.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
                     </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
-                        <li>125 tokens monthly</li>
-                        <li>Priority generation</li>
-                        <li>Advanced templates</li>
-                        <li>Priority support</li>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 2rem 0; color: #555; list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 0.75rem;">✓ 125 tokens monthly</li>
+                        <li style="margin-bottom: 0.75rem;">✓ Priority generation</li>
+                        <li style="margin-bottom: 0.75rem;">✓ All features</li>
+                        <li style="margin-bottom: 0.75rem;">✓ Email support</li>
                     </ul>
-                    <button onclick="showSignupModal()" class="primary" style="width: 100%;">Choose Creator</button>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 1rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600;">Choose Creator</button>
                 </div>
 
                 <!-- Agency Plan -->
-                <div class="card" style="text-align: center; background: white;">
-                    <h3 style="color: #333;">Agency</h3>
-                    <div style="font-size: 2.5rem; font-weight: bold; margin: 1rem 0; color: #333;">
+                <div class="card" style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #333; font-size: 1.75rem; margin-bottom: 1rem;">Agency</h3>
+                    <div style="font-size: 3rem; font-weight: bold; margin: 1.5rem 0; color: #333;">
                         $49.99<span style="font-size: 1rem; color: #6b7280;">/month</span>
                     </div>
-                    <ul style="text-align: left; padding-left: 1.5rem; margin: 1.5rem 0; color: #555;">
-                        <li>500 shared tokens</li>
-                        <li>Team management</li>
-                        <li>Custom branding</li>
-                        <li>Dedicated support</li>
+                    <ul style="text-align: left; padding-left: 1.5rem; margin: 2rem 0; color: #555; list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 0.75rem;">✓ 500 shared tokens</li>
+                        <li style="margin-bottom: 0.75rem;">✓ Team management</li>
+                        <li style="margin-bottom: 0.75rem;">✓ All features</li>
+                        <li style="margin-bottom: 0.75rem;">✓ Email support</li>
                     </ul>
-                    <button onclick="showSignupModal()" class="primary" style="width: 100%;">Choose Agency</button>
+                    <button onclick="showSignupModal()" class="primary" style="width: 100%; padding: 1rem; background: #0cc0df; color: white; border: none; border-radius: 8px; font-weight: 600;">Choose Agency</button>
                 </div>
             </div>
 
             <!-- Token Packs -->
             <div style="margin-top: 4rem; text-align: center;">
-                <h3 style="margin-bottom: 2rem; color: #444;">Need More Tokens? Buy Token Packs</h3>
-                <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 1rem;">
-                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
-                        <h4 style="margin: 0; color: #333;">Mini Boost</h4>
+                <h3 style="margin-bottom: 2rem; color: #444; font-size: 1.75rem;">Need More Tokens? Buy Token Packs</h3>
+                <div class="grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+                    <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Mini Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$4.99</div>
-                        <div style="color: #0cc0df; font-weight: bold;">25 tokens</div>
-                        <small style="color: #6b7280;">$0.20/token</small>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">25 tokens</div>
                     </div>
-                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
-                        <h4 style="margin: 0; color: #333;">Creator Boost</h4>
+                    <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Creator Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$14.99</div>
-                        <div style="color: #0cc0df; font-weight: bold;">100 tokens</div>
-                        <small style="color: #6b7280;">$0.15/token</small>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">100 tokens</div>
                     </div>
-                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
-                        <h4 style="margin: 0; color: #333;">Agency Boost</h4>
+                    <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Agency Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$39.99</div>
-                        <div style="color: #0cc0df; font-weight: bold;">300 tokens</div>
-                        <small style="color: #6b7280;">$0.13/token</small>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">300 tokens</div>
                     </div>
-                    <div class="card" style="text-align: center; padding: 1rem; background: white;">
-                        <h4 style="margin: 0; color: #333;">Mega Boost</h4>
+                    <div class="card" style="text-align: center; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">Mega Boost</h4>
                         <div style="font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; color: #333;">$99.99</div>
-                        <div style="color: #0cc0df; font-weight: bold;">1000 tokens</div>
-                        <small style="color: #6b7280;">$0.10/token</small>
+                        <div style="color: #0cc0df; font-weight: bold; font-size: 1.1rem;">1000 tokens</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer style="background: #1f2937; color: white; padding: 3rem 1rem;">
-        <div class="container" style="max-width: 1200px; margin: 0 auto;">
-            <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+    <!-- FOOTER - Clean, without email icon -->
+    <footer style="background: #1f2937; color: white; padding: 4rem 2rem; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div class="grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem;">
                 <!-- Brand -->
                 <div>
-                    <h3 style="color: #0cc0df;">
-                        <i class="fas fa-hat-wizard"></i> Prompt Alchemy
+                    <h3 style="color: #0cc0df; font-size: 1.5rem; margin-bottom: 1rem;">
+                        <i class="fas fa-hat-wizard"></i> Prompts Alchemy
                     </h3>
-                    <p style="color: #d1d5db;">Professional AI tools for content creators.</p>
+                    <p style="color: #d1d5db; line-height: 1.6;">Professional AI tools for content creators.</p>
                 </div>
 
                 <!-- Links -->
                 <div>
-                    <h4 style="color: #f9fafb;">Product</h4>
+                    <h4 style="color: #f9fafb; margin-bottom: 1rem;">Product</h4>
                     <ul style="list-style: none; padding: 0;">
-                        <li><a href="/" style="color: #d1d5db; text-decoration: none;">Home</a></li>
-                        <li><a href="/prompt-wizard/step/1" style="color: #d1d5db; text-decoration: none;">Prompt Wizard</a></li>
-                        <li><a href="#pricing" style="color: #d1d5db; text-decoration: none;">Pricing</a></li>
-                        <li><a href="/dashboard" style="color: #d1d5db; text-decoration: none;">Dashboard</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/" style="color: #d1d5db; text-decoration: none;">Home</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/prompt-wizard/step/1" style="color: #d1d5db; text-decoration: none;">Prompt Wizard</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#pricing" style="color: #d1d5db; text-decoration: none;">Pricing</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/dashboard" style="color: #d1d5db; text-decoration: none;">Dashboard</a></li>
                     </ul>
                 </div>
 
                 <!-- Legal -->
                 <div>
-                    <h4 style="color: #f9fafb;">Legal</h4>
+                    <h4 style="color: #f9fafb; margin-bottom: 1rem;">Legal</h4>
                     <ul style="list-style: none; padding: 0;">
-                        <li><a href="/terms" style="color: #d1d5db; text-decoration: none;">Terms of Service</a></li>
-                        <li><a href="/privacy" style="color: #d1d5db; text-decoration: none;">Privacy Policy</a></li>
-                        <li><a href="/refunds" style="color: #d1d5db; text-decoration: none;">Refund Policy</a></li>
-                        <li><a href="/contact" style="color: #d1d5db; text-decoration: none;">Contact</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/terms" style="color: #d1d5db; text-decoration: none;">Terms of Service</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/privacy" style="color: #d1d5db; text-decoration: none;">Privacy Policy</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/refunds" style="color: #d1d5db; text-decoration: none;">Refund Policy</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/contact" style="color: #d1d5db; text-decoration: none;">Contact</a></li>
                     </ul>
                 </div>
 
-                <!-- Social -->
+                <!-- Social - No email icon -->
                 <div>
-                    <h4 style="color: #f9fafb;">Connect</h4>
-                    <div style="display: flex; gap: 1rem; font-size: 1.5rem;">
+                    <h4 style="color: #f9fafb; margin-bottom: 1rem;">Connect</h4>
+                    <div style="display: flex; gap: 1.5rem; font-size: 1.5rem;">
                         <a href="https://reddit.com" style="color: #d1d5db;"><i class="fab fa-reddit"></i></a>
                         <a href="https://youtube.com" style="color: #d1d5db;"><i class="fab fa-youtube"></i></a>
                         <a href="https://linkedin.com" style="color: #d1d5db;"><i class="fab fa-linkedin"></i></a>
                         <a href="https://discord.com" style="color: #d1d5db;"><i class="fab fa-discord"></i></a>
-                        <a href="mailto:hello@promptsalchemy.com" style="color: #d1d5db;"><i class="fas fa-envelope"></i></a>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #9ca3af;">
-                        © 2024 Prompt Alchemy. All rights reserved.
+                    <p style="margin-top: 2rem; font-size: 0.9rem; color: #9ca3af;">
+                        © 2024 Prompts Alchemy. All rights reserved.
                     </p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- SIGNUP MODAL (Hidden by default) -->
+    <!-- SIGNUP MODAL (Keep the same) -->
     <div id="signupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 400px; width: 90%;">
-            <h2 style="color: #333; margin-bottom: 1rem;">Join Prompt Alchemy</h2>
-            <p style="color: #555; margin-bottom: 1.5rem;">Enter your email to get started. We\'ll send you a login link.</p>
-            <input type="email" id="signupEmail" placeholder="you@example.com" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 6px;">
-            <button onclick="submitSignup()" class="primary" style="width: 100%; padding: 0.75rem;">Send Magic Link</button>
-            <button onclick="hideSignupModal()" style="width: 100%; margin-top: 0.5rem; background: transparent; color: #6b7280;">Cancel</button>
+        <div style="background: white; padding: 2.5rem; border-radius: 12px; max-width: 400px; width: 90%;">
+            <h2 style="color: #333; margin-bottom: 1rem; font-size: 1.75rem;">Join Prompts Alchemy</h2>
+            <p style="color: #555; margin-bottom: 1.5rem; line-height: 1.6;">Enter your email to get started. We\'ll send you a login link.</p>
+            <input type="email" id="signupEmail" placeholder="you@example.com" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+            <button onclick="submitSignup()" class="primary" style="width: 100%; padding: 0.75rem; background: #0cc0df; color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 1rem;">Send Magic Link</button>
+            <button onclick="hideSignupModal()" style="width: 100%; margin-top: 0.5rem; padding: 0.75rem; background: transparent; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px;">Cancel</button>
         </div>
     </div>
 
+    <!-- Keep the same JavaScript -->
     <script>
-        // Modal functions
-        function showSignupModal() {{
-            document.getElementById('signupModal').style.display = 'flex';
-        }}
-        
-        function hideSignupModal() {{
-            document.getElementById('signupModal').style.display = 'none';
-        }}
-        
-        function submitSignup() {{
-            const email = document.getElementById('signupEmail').value;
-            if (email && email.includes('@')) {{
-                alert('Thank you! Signup launching soon. We\'ll notify you at ' + email);
-                hideSignupModal();
-            }} else {{
-                alert('Please enter a valid email address.');
-            }}
-        }}
-        
-        // Close modal when clicking outside
-        document.getElementById('signupModal').addEventListener('click', function(e) {{
-            if (e.target.id === 'signupModal') {{
-                hideSignupModal();
-            }}
-        }});
-        
-        // Smooth scroll for pricing anchor
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {{
-            anchor.addEventListener('click', function (e) {{
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#pricing') {{
-                    document.querySelector(targetId).scrollIntoView({{
-                        behavior: 'smooth'
-                    }});
-                }}
-            }});
-        }});
+        // ... (same JavaScript as before)
     </script>
     '''
     
+    return layout("Prompts Alchemy - Professional AI Tools", content, step=0)
     return layout("Prompt Alchemy - Professional AI Tools", content, step=0)
 
 # ========== STEP 1: GOAL SELECTION ==========
