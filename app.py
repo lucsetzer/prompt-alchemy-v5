@@ -257,9 +257,10 @@ button, a[role="button"] {{
     </style>
 </head>
 <body>
-    <nav class="container">
-        <ul>
-            <li>
+    <nav style="background: #1e293b; border-bottom: 1px solid #334155; padding: 1rem 0; width: 100%;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <ul style="margin: 0; padding: 0;">
+            <li style="display: inline;">
                 <strong>
                     <a href="/" style="color: #0cc0df; text-decoration: none;">
                         <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
@@ -267,12 +268,13 @@ button, a[role="button"] {{
                 </strong>
             </li>
         </ul>
-        <ul>
-            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="/prompt-wizard"><i class="fas fa-magic"></i> Wizards</a></li>
+        <ul style="margin: 0; padding: 0; display: flex; gap: 1.5rem;">
+            <li style="display: inline;"><a href="/" style="color: #cbd5e1;"><i class="fas fa-home"></i> Home</a></li>
+            <li style="display: inline;"><a href="/dashboard" style="color: #cbd5e1;"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li style="display: inline;"><a href="/prompt-wizard" style="color: #cbd5e1;"><i class="fas fa-magic"></i> Wizards</a></li>
         </ul>
-    </nav>
+    </div>
+</nav>
     
     <main class="container">
         {content}
