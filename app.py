@@ -811,9 +811,11 @@ async def home(request: Request):  # <-- Add 'request' parameter
 
 @app.get("/dashboard")
 async def dashboard(request: Request, session_token: str = Cookie(None)):
-    """Dashboard with user data"""
+    print(f"📊 Dashboard accessed. Session token: {session_token}")
     
     user = get_current_user(session_token)
+    print(f"📊 User: {user}")
+    
     
     if user:
         # User is logged in
