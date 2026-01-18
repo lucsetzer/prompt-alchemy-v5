@@ -151,7 +151,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #999999;
+            color: #333333;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -206,7 +206,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     </main>
     
     <footer style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #666666; border-top: 1px solid #e5e7eb;">
-        <p>© 2024 Prompts Alchemy</p>
+        <p>© 2025 Prompts Alchemy</p>
     </footer>
     
     <script>
@@ -439,8 +439,8 @@ async def step1():
             <div class="step-icon">
                 <i class="{icon_class}"></i>
             </div>
-            <h3 style="margin: 0; color: #333;">{label}</h3>
-            <p style="margin: 0; color: #555; font-size: 0.9rem;">{description}</p>
+            <h3 style="margin: 0; color: #666;">{label}</h3>
+            <p style="margin: 0; color: #444; font-size: 0.9rem;">{description}</p>
         </a>
         '''
     
