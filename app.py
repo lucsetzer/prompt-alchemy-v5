@@ -99,7 +99,7 @@ async def test_page():
 
 # ========== CORE LAYOUT FUNCTION ==========
 def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
-    """WORKING layout function - simplified"""
+    """Dark theme layout for wizard steps"""
     
     progress_percent = (step / 6) * 100 if step <= 6 else 100
     
@@ -111,20 +111,33 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* DARK THEME */
         body {{
-            background: #ffffff;
-            color: #333333;
+            background: #0f172a;
+            color: #e2e8f0;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }}
         
-        .progress-container {{
-            margin: 2rem 0;
+        /* Navigation */
+        nav.container {{
+            background: #1e293b !important;
+            border-bottom: 1px solid #334155 !important;
+            padding: 1rem 0;
         }}
         
+        nav a {{
+            color: #cbd5e1 !important;
+        }}
+        
+        nav a:hover {{
+            color: #0cc0df !important;
+        }}
+        
+        /* Progress bar */
         .progress-bar {{
             height: 8px;
-            background: #e5e7eb;
+            background: #334155;
             border-radius: 4px;
             overflow: hidden;
         }}
@@ -133,27 +146,19 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             height: 100%;
             background: linear-gradient(90deg, #0cc0df, #00d9ff);
             width: {progress_percent}%;
-            transition: width 0.5s ease;
         }}
         
-        .progress-steps {{
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-            color: #999999 !important;
-        }}
-        
+        /* Step cards */
         .step-card {{
-            background: #ffffff;
-            border: 2px solid #e5e7eb;
+            background: #1e293b;
+            border: 2px solid #334155;
             border-radius: 12px;
             padding: 1.5rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #333333;
+            color: #e2e8f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -167,45 +172,24 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             transform: translateY(-4px);
             box-shadow: 0 4px 12px rgba(12, 192, 223, 0.15);
         }}
-
-        /* Modal styles */
-        .modal-backdrop {{
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }}
         
-        .modal-content {{
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            max-width: 400px;
-            width: 90%;
-        }}
-
-        
+        /* Output box */
         .clean-output {{
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
+            background: #1e293b;
+            border: 1px solid #334155;
             border-radius: 6px;
             padding: 1.5rem;
             margin: 1rem 0;
             line-height: 1.6;
-            color: #333333;
-            font-size: 0.95rem;
+            color: #e2e8f0;
         }}
         
-        nav.container {{
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 1rem 0;
+        article, .card {{
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
         }}
     </style>
 </head>
@@ -214,14 +198,15 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         <ul>
             <li>
                 <strong>
-                    <a href="/" style="color: #0a8ea8; text-decoration: none;">
+                    <a href="/" style="color: #0cc0df; text-decoration: none;">
                         <i class="fa-solid fa-hat-wizard"></i> Prompts Alchemy
                     </a>
                 </strong>
             </li>
         </ul>
         <ul>
-            <li><a href="/"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             <li><a href="/prompt-wizard/step/1"><i class="fas fa-magic"></i> Prompt Wizard</a></li>
         </ul>
     </nav>
@@ -230,8 +215,8 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         {content}
     </main>
     
-    <footer style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #666666; border-top: 1px solid #e5e7eb;">
-        <p>© 2025 Prompts Alchemy</p>
+    <footer style="text-align: center; padding: 2rem 0; margin-top: 3rem; color: #64748b; border-top: 1px solid #334155;">
+        <p>© 2024 Prompts Alchemy</p>
     </footer>
     
     <script>
