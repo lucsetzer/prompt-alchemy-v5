@@ -207,7 +207,7 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            color: #e2e8f0;
+            color: #e2e8f0 !important;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -223,13 +223,13 @@ def layout(title: str, content: str, step: int = 1) -> HTMLResponse:
         }}
         
         .step-card h3 {{
-            color: #f1f5f9;
+            color: #f1f5f9 !important;
             margin: 0;
             font-size: 1.25rem;
         }}
         
         .step-card p {{
-            color: #cbd5e1;
+            color: #cbd5e1 !important;
             margin: 0;
             font-size: 0.95rem;
             line-height: 1.4;
