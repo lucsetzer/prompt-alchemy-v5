@@ -9,8 +9,8 @@ from fastapi.templating import Jinja2Templates
 import os
 import requests
 import json
-from routes.dashboard import router as dashboard_router
-from routes.script_wizard import router as script_wizard_router
+#from routes.dashboard import router as dashboard_router
+#from routes.script_wizard import router as script_wizard_router
 import time
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
