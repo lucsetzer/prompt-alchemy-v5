@@ -1126,9 +1126,11 @@ async def prompt_wizard_landing(request: Request):
         <!-- CTA -->
         <div style="text-align: center; margin-top: 3rem;">
             <h2>Ready to create your perfect prompt?</h2>
-            <button onclick="startWizard()" class="cta-button">
-                <i class="fas fa-play"></i> Start Prompt Wizard
-            </button>
+            <a href="/wizard" style="text-decoration: none; display: inline-block;">
+                <button class="cta-button">
+                    <i class="fas fa-play"></i> Start Prompt Wizard
+                </button>
+            </a>
             <p style="color: #94a3b8; margin-top: 1rem;">
                 <small>You'll be prompted to sign in or create an account</small>
             </p>
