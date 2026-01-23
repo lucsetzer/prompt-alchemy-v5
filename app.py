@@ -71,6 +71,23 @@ ICON_MAP = {
     "humorous": "fa-solid fa-face-laugh-beam",
 }
 
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+@app.route("/privacy")  
+def privacy():
+    return render_template("privacy.html")
+
+@app.route("/refund")
+def refund():
+    return render_template("refund.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+
 @app.get("/health")
 async def health_check():
     """Simple health check endpoint"""
