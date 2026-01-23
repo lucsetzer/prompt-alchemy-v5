@@ -767,7 +767,7 @@ async def request_login(email: str = Body(..., embed=True)):
         user = cursor.fetchone()
         
         if not user:
-            # Create new user with 10 tokens
+            # Create new user with 15 tokens
             cursor.execute(
                 "INSERT INTO users (email, tokens) VALUES (?, 10)",
                 (email,)
@@ -1118,7 +1118,7 @@ async def prompt_wizard_landing(request: Request):
                 <i class="fas fa-bolt"></i> 2 tokens per prompt
             </div>
             <p style="color: #94a3b8; margin: 1rem 0;">
-                New users start with <strong>10 free tokens</strong> (5 prompts!)<br>
+                New users start with <strong>15 free tokens</strong> (5 prompts!)<br>
                 No credit card required to start.
             </p>
         </div>
