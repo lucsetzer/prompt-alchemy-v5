@@ -4,7 +4,7 @@ print(f"Python path: {sys.path}")
 
 
 from fastapi import FastAPI, Request, Query, Body, Cookie
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 import os
 import requests
@@ -19,7 +19,7 @@ import secrets
 import datetime
 from fastapi.staticfiles import StaticFiles
 
-app = FastAPI(title="Prompt Wizard")
+app = FastAPI(title="Prompts Alchemy")
 
 # Mount static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -71,21 +71,21 @@ ICON_MAP = {
     "humorous": "fa-solid fa-face-laugh-beam",
 }
 
-@app.route("/terms")
-def terms():
-    return render_template("terms.html")
+@app.get("/terms")
+async def terms():
+    return FileResponse("templates/terms.html")
 
-@app.route("/privacy")  
-def privacy():
-    return render_template("privacy.html")
+@app.get("/privacy")  
+async def privacy():
+    return FileResponse("templates/privacy.html")
 
-@app.route("/refund")
-def refund():
-    return render_template("refund.html")
+@app.get("/refund")
+async def refund():
+    return FileResponse("templates/refund.html")
 
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
+@app.get("/contact")
+async def contact():
+    return FileResponse("templates/contact.html")
 
 
 @app.get("/health")
