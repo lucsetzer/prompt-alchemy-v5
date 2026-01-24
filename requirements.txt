@@ -3,3 +3,6 @@ uvicorn[standard]==0.24.0
 itsdangerous==2.1.2
 resend==2.0.0
 python-dotenv==1.0.0
+jinja2
+python-multipart
+sqlite3
