@@ -837,10 +837,38 @@ async def dashboard(request: Request, session_token: str = Cookie(None)):
     user = get_current_user(session_token)
     
     if user:
+        # ===== ADD THIS BLOCK =====
+        # Get token balance from token bank
+        import httpx
+        token_balance = 0
+        
+        try:
+            async with httpx.AsyncClient() as client:
+                # Call YOUR token bank API - adjust port if needed
+                response = await client.get(
+                    "http://localhost:8001/balance",
+                    params={"user_email": user['email']},
+                    timeout=5.0  # Don't wait forever
+                )
+                if response.status_code == 200:
+                    token_balance = response.json().get("balance", 0)
+        except Exception as e:
+            print(f"Token bank error: {e}")
+            token_balance = 0  # Fallback
+        # ===== END ADDED BLOCK =====
+        
         content = f'''
         <article style="text-align: center; padding: 2rem 0;">
             <h1><i class="fas fa-tachometer-alt"></i> Your Dashboard</h1>
             <p>Welcome back, <strong>{user['email']}</strong>!</p>
+            
+            <!-- ===== ADD TOKEN DISPLAY ===== -->
+            <div style="background: #1e293b; padding: 1.5rem; border-radius: 12px; margin: 2rem auto; max-width: 300px; border: 1px solid #334155;">
+                <h3 style="margin-top: 0; color: #0cc0df;"><i class="fas fa-coins"></i> Token Balance</h3>
+                <p style="font-size: 3rem; font-weight: bold; margin: 1rem 0;">{token_balance}</p>
+                <p style="color: #94a3b8; margin: 0;">Available tokens</p>
+            </div>
+            <!-- ===== END TOKEN DISPLAY ===== -->
             
             <button id="logoutBtn" style="background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 6px; border: none; cursor: pointer;">
                 <i class="fas fa-sign-out-alt"></i> Logout
